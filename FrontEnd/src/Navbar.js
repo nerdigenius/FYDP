@@ -1,14 +1,14 @@
+import React from 'react'
 import './Navbar.css'
 
 export const Navbar = () => {
   return (
     <section>
-      <div className="navbar_comp">
-        <nav className="navbar">
+      <div className="container">
+        <div className="menubar">
           <a href="#" className="logo">
-            #DeVote
+            DeVote
           </a>
-
           <ul>
             <li>
               <a href="#">Personal Info</a>
@@ -20,10 +20,10 @@ export const Navbar = () => {
               <a href="#">Contact</a>
             </li>
             <li>
-              <a href="#">Vote</a>
+              <button className="vote_btn">Vote</button>
             </li>
           </ul>
-        </nav>
+        </div>
       </div>
     </section>
   )

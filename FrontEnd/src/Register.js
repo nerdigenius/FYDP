@@ -5,8 +5,6 @@ export const Register = (props) => {
   const [name, setName] = useState('')
 
   const [email, setEmail] = useState('')
-  const [mobile, setMobile] = useState('')
-  const [wallet_add, setWallet] = useState('')
   const [password, setPass] = useState('')
 
   const handleSubmit = (e) => {
@@ -22,6 +20,7 @@ export const Register = (props) => {
         <input
           type="text"
           value={name}
+          onChange={(e) => setName(e.target.value)}
           name="name"
           id="name"
           placeholder="Username"
