@@ -1,23 +1,24 @@
-import { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import React, { useState } from 'react'
+import { Login } from './Login.js'
+import { Register } from './Register.js'
 
 function App() {
-  const [message, setMessage] = useState('');
+  const [currentForm, setCurrentForm] = useState('login')
 
-  useEffect(() => {
-    fetch('http://localhost:8000')
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message))
-      .catch((error) => console.error('Error fetching data:', error));
-  }, []);
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>{message}</p>
-      </header>
-    </div>
-  );
+  const toggleForm = (forName) => {
+    setCurrentForm(forName)
+  }
+
+ return (
+   <div className="App">
+     {currentForm === 'login' ? (
+       <Login onFormSwitch={toggleForm} />
+     ) : (
+       <Register onFormSwitch={toggleForm} />
+     )}
+   </div>
+ )
 }
 
-export default App;
+export default App
