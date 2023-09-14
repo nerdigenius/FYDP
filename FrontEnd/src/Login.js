@@ -1,5 +1,6 @@
 import './Login.css'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 export const Login = (props) => {
   const [email, setEmail] = useState('')
@@ -37,10 +38,13 @@ export const Login = (props) => {
         />
         <br />
         <br />
-        <button
-          className="reg_btn"
-          onClick={() => props.onFormSwitch('register')}
-        >Don't have an account? Signup
+        <button className="login_btn" type="submit">
+          Login
+        </button>
+        <br />
+        <br />
+        <button className='reg_btn' onClick={() => props.onFormSwitch('register')}>
+          Don't have an account? Signup
         </button>
       </form>
     </div>
