@@ -20,7 +20,9 @@ export const Navbar = () => {
               <a href="#">Contact</a>
             </li>
             <li>
-              <button className="vote_btn">Vote</button>
+              <button class="vote_btn ui-btn">
+                <span>Vote</span>
+              </button>
             </li>
           </ul>
         </div>

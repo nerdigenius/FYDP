@@ -1,82 +1,256 @@
-/* App.css */
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* Personal.css */
 
 .Personal {
-  background: #001124;
+  background-color: #001124;
+  height: 100vh;
 }
-/* App.css */
 
+/* Style the section containing the personal info */
+
+/* Style the personal info container */
 .personal-info-page {
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  background-color: #f0f0f0;
-  min-height: 100vh; 
+  align-items: center; /* Center vertically */
 }
 
-.left-column,
-.right-column {
+/* Style the profile picture */
+.personal-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+}
+
+/* Left column */
+.left-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 400px; /* Limit maximum width */
-  padding: 20px;
-  margin: 0 10px; /* Add horizontal margin for spacing */
+  margin-top: 20px;
 }
 
 .profile-picture {
-  width: 150px;
-  height: 150px;
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
-  background-color: #ccc; /* You can add a background image here */
-  margin-bottom: 20px;
+  border-radius: 50%;
+  background-color: #ccc;
+  background-size: cover;
+  background-position: center center;
+  margin: 0px 50px 20px 0;
+  outline: 2px solid rgb(255, 255, 255);
+
+  /* Add a glowing effect */
+  box-shadow: 0 0 10px rgba(134, 76, 134, 0.7);
+  transition: box-shadow 0.3s ease-in-out;
 }
 
-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  margin-bottom: 10px;
+.profile-picture:hover {
+  /* Increase the glow effect on hover */
+  box-shadow: 0 0 20px rgba(224, 50, 224, 0.9);
+}
+
+.photo-upload-button {
+  position: relative;
+  width: 210px;
+  height: 40px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  border: 1px solid #17795e;
+  background-color: #209978;
+  overflow: hidden;
+  border-radius: 10px;
+  margin: 10px 35px 15px 0;
 }
 
-button:hover {
-  background-color: #0056b3;
+.photo-upload-button,
+.button__icon,
+.button__text {
+  transition: all 0.3s;
 }
 
-
-label {
-  font-weight: bold;
-  margin-bottom: 5px;
+.photo-upload-button .button__text {
+  transform: translateX(22px);
+  color: #fff;
+  font-weight: 600;
 }
 
-input {
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  transition: border-color 0.3s ease;
+.photo-upload-button .button__icon {
+  position: absolute;
+  transform: translateX(169px);
+  height: 100%;
+  width: 39px;
+  background-color: #17795e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-input:disabled {
-  background-color: #f5f5f5;
+.photo-upload-button .svg {
+  width: 20px;
+  fill: #fff;
 }
 
-input:focus {
-  border-color: #007bff;
+.photo-upload-button:hover {
+  background: #17795e;
+}
+
+.photo-upload-button:hover .button__text {
+  color: transparent;
+}
+
+.photo-upload-button:hover .button__icon {
+  width: 210px;
+  transform: translateX(0);
+}
+
+.photo-upload-button:active .button__icon {
+  background-color: #146c54;
+}
+
+.photo-upload-button:active {
+  border: 1px solid #146c54;
+}
+
+.edit_btn {
+  width: 100px;
+  height: 40px;
+  border-radius: 40px;
+  border: none;
+  background-color: #015fc7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+  margin-right: 25px;
+}
+
+.IconContainer {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(to bottom, rgb(255, 136, 255), rgb(172, 70, 255));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 2;
+  transition-duration: 0.3s;
+}
+
+.edit_btn .icon {
+  border-radius: 1px;
+}
+
+.edit_btn .text {
+  height: 100%;
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 1;
+  transition-duration: 0.3s;
+  font-size: 1.04em;
+}
+
+.edit_btn:hover .IconContainer {
+  width: 90px;
+  border-radius: 40px;
+  transition-duration: 0.3s;
+}
+
+.edit_btn:hover .text {
+  transform: translate(10px);
+  width: 0;
+  font-size: 0;
+  transition-duration: 0.3s;
+}
+
+.edit_btn:active {
+  transform: scale(0.95);
+  transition-duration: 0.3s;
+}
+
+/* Left column ends here */
+
+/* Right Column starts here */
+.right-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 7%;
+}
+
+.info_form {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.info_label {
+  font-weight: 500;
+  margin: 35px 0 10px 20px;
+  display: flex;
+  font-size: 20px;
+  color: rgb(231, 231, 231);
+}
+
+.InputContainer {
+  width: 230px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    to bottom,
+    rgb(227, 213, 255),
+    rgb(255, 231, 231)
+  );
+  border-radius: 30px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.075);
+}
+
+.personal_input {
+  width: 200px;
+  height: 40px;
+  border: none;
+  outline: none;
+  caret-color: rgb(255, 81, 0);
+  background-color: rgb(255, 255, 255);
+  border-radius: 30px;
+  padding-left: 15px;
+  letter-spacing: 0.8px;
+  color: rgb(19, 19, 19);
+  font-size: 14px;
 }
 
 /* Media query for responsiveness */
 @media (max-width: 768px) {
   .personal-info-page {
-    padding: 10px; /* Adjust padding for smaller screens */
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .left-column,
-  .right-column {
-    max-width: none; /* Remove max-width on smaller screens */
+  .profile-picture {
+    margin: 0 0 20px;
+  }
+
+  .info_form {
+    max-width: none;
+    width: 100%;
   }
 }
+
+
