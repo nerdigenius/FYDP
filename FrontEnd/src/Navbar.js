@@ -17,7 +17,7 @@ export const Navbar = () => {
               <a href="#">Elections</a>
             </li>
             <li>
-              <a href="#">Contact</a>
+              <a href="#">Your Elections</a>
             </li>
             <li>
               <button class="vote_btn ui-btn">
