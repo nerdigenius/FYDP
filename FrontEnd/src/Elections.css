@@ -5,7 +5,7 @@
 }
 
 .Elections {
-  background-color: #ecf2ff;
+  background-color: #001124;
   height: 100vh;
 }
 
@@ -109,7 +109,7 @@ h1 {
   width: 1em;
   left: 0.2em;
   bottom: 0.1em;
-  background-color: rgb(128, 94, 252);
+  background-color: rgb(231, 231, 231);
   border-radius: inherit;
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
