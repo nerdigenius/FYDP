@@ -17,7 +17,7 @@ function App() {
 
       <Elections/>
 
-      <Personal/>
+      {/* <Personal/> */}
 
       {/* {currentForm === 'login' ? (
         <Login onFormSwitch={toggleForm} />
