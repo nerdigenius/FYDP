@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Login } from './Login.js'
 import { Register } from './Register.js'
 import { Personal } from './Personal.js'
+import { Elections } from './Elections'
 
 function App() {
   const [currentForm, setCurrentForm] = useState('login')
@@ -14,7 +15,10 @@ function App() {
   return (
     <div className="App">
 
+      <Elections/>
+
       <Personal/>
+
       {/* {currentForm === 'login' ? (
         <Login onFormSwitch={toggleForm} />
       ) : (

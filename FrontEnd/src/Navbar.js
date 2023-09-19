@@ -20,7 +20,7 @@ export const Navbar = () => {
               <a href="#">Your Elections</a>
             </li>
             <li>
-              <button class="vote_btn ui-btn">
+              <button class="vote_btn ui-btn" id='vote_btn'>
                 <span>Vote</span>
               </button>
             </li>

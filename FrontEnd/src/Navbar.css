@@ -26,52 +26,72 @@ a {
 
 .menubar ul {
   display: flex;
-  margin-top: 25px;
+  margin-top: 0px;
   gap: 1rem;
+  position: relative;
 }
 
 .menubar li {
-  margin-top: 0px;
+  position: relative;
+  cursor: pointer;
 }
 
-.menubar li:hover {
-  margin-top: 0;
-  border-bottom: 2px solid #005ac7;
+.menubar li::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #005ac7;
+  bottom: 0;
+  left: 0;
+  top: 30px;
+  transform: scaleX(0); /* Initially set the width to 0, so it's not visible */
+  transform-origin: left;
+  transition: transform 0.3s ease; /* Add a transition for smooth animation */
 }
+
+.menubar li:hover::before {
+  transform: scaleX(1); /* Expand the width to 100% on hover */
+}
+
 
 .menubar li:last-child {
   margin-top: 0;
   border: none;
+  width: 0%;
+  height: 0px;
+  bottom: 0;
+  left: 0;
 }
 
 .menubar li a {
   margin-bottom: 5px;
   font-size: 18px;
+  position: relative; /* Add this line */
+  overflow: hidden;
 }
 
-.menubar .vote_btn {
-  margin-top: -20px;
+.vote_btn {
+  margin-top: -15px;
   /* background: #015fc7; */
   color: aliceblue;
   width: 100px;
   height: 50px;
-  border: none;
+  border: none !important;
   border-radius: 15px;
   cursor: pointer;
 }
 
-/* .menubar .vote_btn:hover {
-  background-image: linear-gradient(65deg, #8781ce, #5c5cfc 68%, #3761b4);
-  color: rgb(224, 224, 224);
-  transition: 0.3s;
-} */
+#vote_btn{
+  border: none !important;
+}
 
 .ui-btn {
   --btn-default-bg: #015fc7;
   --btn-padding: 15px 20px;
   --btn-hover-bg: rgb(128, 94, 252);
-  --btn-transition: .1s;
-  --btn-letter-spacing: .1rem;
+  --btn-transition: 0.1s;
+  --btn-letter-spacing: 0.1rem;
   --btn-animation-duration: 0.5s;
   --btn-shadow-color: rgb(128, 94, 252);
   --btn-shadow: 0 2px 10px 0 var(--btn-shadow-color);
@@ -113,69 +133,69 @@ a {
 .ui-btn span::before {
   box-sizing: border-box;
   position: absolute;
-  content: "";
+  content: '';
   background: inherit;
 }
 
-.ui-btn:hover, .ui-btn:focus {
+.ui-btn:hover,
+.ui-btn:focus {
   background: var(--btn-hover-bg);
 }
 
-.ui-btn:hover span, .ui-btn:focus span {
+.ui-btn:hover span,
+.ui-btn:focus span {
   color: var(--hover-btn-color);
 }
 
-.ui-btn:hover span::before, .ui-btn:focus span::before {
+.ui-btn:hover span::before,
+.ui-btn:focus span::before {
   animation: chitchat linear both var(--btn-animation-duration);
 }
 
 @keyframes chitchat {
   0% {
-    content: "#";
+    content: '#';
   }
   5% {
-    content: ".";
+    content: '.';
   }
   10% {
-    content: "^{";
+    content: '^{';
   }
   15% {
-    content: "-!";
+    content: '-!';
   }
   20% {
-    content: "#$_";
+    content: '#$_';
   }
   25% {
-    content: "№:0";
+    content: '№:0';
   }
   30% {
-    content: "#{+.";
-  }
-  35% {
-    content: "@}-?";
+    content: '#{+.';}35%{content: '@}-?';
   }
   40% {
-    content: "?{4@%";
+    content: '?{4@%';
   }
   45% {
-    content: "=.,^!";
+    content: '=.,^!';
   }
   50% {
-    content: "?2@%";
+    content: '?2@%';
   }
   55% {
-    content: "\;1}]";
+    content: '\;1}]';
   }
   60% {
-    content: "?{%:%";
+    content: '?{%:%';
     right: 0;
   }
   65% {
-    content: "|{f[4";
+    content: '|{f[4';
     right: 0;
   }
   70% {
-    content: "{4%0%";
+    content: '{4%0%';
     right: 0;
   }
   75% {
@@ -183,7 +203,7 @@ a {
     right: 0;
   }
   80% {
-    content: "{0%";
+    content: '{0%';
     right: 0;
   }
   85% {
@@ -191,15 +211,15 @@ a {
     right: 0;
   }
   90% {
-    content: "4";
+    content: '4';
     right: 0;
   }
   95% {
-    content: "2";
+    content: '2';
     right: 0;
   }
   100% {
-    content: "";
+    content: '';
     right: 0;
   }
 }
