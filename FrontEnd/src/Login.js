@@ -1,14 +1,33 @@
 import './Login.css'
+import axios from 'axios';
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
 
 export const Login = (props) => {
   const [email, setEmail] = useState('')
   const [password, setPass] = useState('')
+  function sendPostRequest(data) {
+    axios.post('http://localhost:8000/auth/login', data)
+      .then((response) => {
+        // Handle the successful response here
+        console.log('POST request successful:', response.data.token);
+        window.alert(response.data.token)
+        window.location.href="/personal"
+      })
+      .catch((error) => {
+        // Handle any errors here
+        console.error('Error sending POST request:', error.message);
+        window.alert(error.message)
+      });
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log(email)
+    let data={"email":email,
+    "password":password
+  }
+  sendPostRequest(data)
   }
 
   return (

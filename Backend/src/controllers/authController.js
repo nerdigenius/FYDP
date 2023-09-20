@@ -4,12 +4,12 @@ const config = require("../../config");
 const User = require('../models/User');
 
 async function signup(req, res) {
-  const { email, password } = req.body;
-  console.log(email,password)
+  const { email, password,username } = req.body;
+  console.log(email,password,username)
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ email, password: hashedPassword });
+    const user = new User({ email, password: hashedPassword,username });
     await user.save();
     res.status(201).json({ message: 'User registered successfully!' });
   } catch (error) {

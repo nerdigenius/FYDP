@@ -11,10 +11,10 @@ export const Navbar = () => {
           </a>
           <ul>
             <li>
-              <a href="#">Personal Info</a>
+              <a href="/personal">Personal Info</a>
             </li>
             <li>
-              <a href="#">Elections</a>
+              <a href="/elections">Elections</a>
             </li>
             <li>
               <a href="#">Your Elections</a>

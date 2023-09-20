@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import './Register.css'
+import axios from 'axios';
+
 
 export const Register = (props) => {
   const [name, setName] = useState('')
@@ -9,7 +11,26 @@ export const Register = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    let data={"email":email,
+    "password":password,
+    "username":name
+  }
+  sendPostRequest(data)
     console.log(email)
+  }
+
+  function sendPostRequest(data) {
+    axios.post('http://localhost:8000/auth/signup', data)
+      .then((response) => {
+        // Handle the successful response here
+        console.log('POST request successful:', response.data.message);
+        window.alert(response.data.message)
+        window.location.href="/"
+      })
+      .catch((error) => {
+        // Handle any errors here
+        console.error('Error sending POST request:', error);
+      });
   }
 
   return (
