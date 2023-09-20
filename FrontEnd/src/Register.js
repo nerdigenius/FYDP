@@ -58,7 +58,7 @@ export const Register = (props) => {
         <br />
         <button
           className="login_btn"
-          onClick={() => props.onFormSwitch('login')}
+          onClick={() => window.location.href = '/'}
         >
           Already have an account? Login
         </button>
