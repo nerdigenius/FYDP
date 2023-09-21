@@ -1,9 +1,10 @@
 import './Login.css'
 import axios from 'axios';
 import { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = (props) => {
+  const navigate = useNavigate ();
   const [email, setEmail] = useState('')
   const [password, setPass] = useState('')
   function sendPostRequest(data) {
@@ -12,7 +13,7 @@ export const Login = (props) => {
         // Handle the successful response here
         console.log('POST request successful:', response.data.token);
         window.alert(response.data.token)
-        window.location.href="/personal"
+        navigate("/personal")
       })
       .catch((error) => {
         // Handle any errors here
@@ -64,7 +65,7 @@ export const Login = (props) => {
         <br />
         <button
           className="reg_btn"
-          onClick={() =>window.location.href = '/signup'}
+          onClick={() =>navigate('/signup')}
         >
           Don't have an account? Signup
         </button>

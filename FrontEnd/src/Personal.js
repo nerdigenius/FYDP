@@ -1,6 +1,7 @@
 import './Personal.css'
 import { useState } from 'react'
 import { Navbar } from './Navbar'
+import axios from 'axios'
 
 export const Personal = () => {
   const [isEditMode, setIsEditMode] = useState(false)
@@ -36,10 +37,22 @@ export const Personal = () => {
 
     if (file) {
       const reader = new FileReader()
+      const formData = new FormData();
+      formData.append('profilePicture', file);
 
       reader.onload = (e) => {
         const newProfilePictureUrl = e.target.result
         const profilePictureElement = document.querySelector('.profile-picture')
+
+        axios.post('http://localhost:8000/uploads/upload-profile-picture', formData)
+      .then((response) => {
+        console.log(response)
+        // Handle success (e.g., show a success message)
+      })
+      .catch((error) => {
+        console.log(error)
+        // Handle error (e.g., show an error message)
+      });
 
         // Set the selected photo as the source of the "profile-picture" element
         if (profilePictureElement) {

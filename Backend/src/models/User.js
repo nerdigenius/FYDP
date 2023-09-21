@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  profilePicture: {
+    type: String, // Store the file path or URL of the profile picture
+  },
 });
 
 const User = mongoose.model('User', userSchema);
