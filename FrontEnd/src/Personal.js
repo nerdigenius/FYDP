@@ -1,9 +1,12 @@
 import './Personal.css'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { Navbar } from './Navbar'
 import axios from 'axios'
 
 export const Personal = () => {
+
+  const [profilePictureUrl, setProfilePictureUrl] = useState('');
+
   const [isEditMode, setIsEditMode] = useState(false)
   // User's personal information data (initial values)
   const [userData, setUserData] = useState({
@@ -43,16 +46,23 @@ export const Personal = () => {
       reader.onload = (e) => {
         const newProfilePictureUrl = e.target.result
         const profilePictureElement = document.querySelector('.profile-picture')
+        const token = localStorage.getItem('token');
+        console.log("token:::"+token)
 
-        axios.post('http://localhost:8000/uploads/upload-profile-picture', formData)
-      .then((response) => {
-        console.log(response)
-        // Handle success (e.g., show a success message)
+        axios.post('http://localhost:8000/auth/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: token, 
+        },
       })
-      .catch((error) => {
-        console.log(error)
-        // Handle error (e.g., show an error message)
-      });
+        .then((response) => {
+          console.log(response)
+          // Handle success (e.g., show a success message)
+        })
+        .catch((error) => {
+          console.log(error)
+          // Handle error (e.g., show an error message)
+        })
 
         // Set the selected photo as the source of the "profile-picture" element
         if (profilePictureElement) {
@@ -68,13 +78,36 @@ export const Personal = () => {
     }
   }
 
+
+  useEffect(() => {
+    // Fetch the profile picture URL here
+    const token = localStorage.getItem('token'); // Assuming you stored the JWT token in localStorage
+  
+    if (token) {
+      axios.get('http://localhost:8000/auth/getImage', {
+        headers: {
+          Authorization: token,
+        },
+      })
+        .then((response) => {
+          // Update the state variable with the profile picture URL
+          console.log(response.data.profilePictureUrl)
+          setProfilePictureUrl(response.data.profilePictureUrl);
+        })
+        .catch((error) => {
+          console.error('Error fetching profile picture:', error);
+          // Handle the error, e.g., show a default profile picture
+        });
+    }
+  }, []);
+
   return (
     <div className="Personal">
       <section>
         <Navbar></Navbar>
         <div className="personal-info">
           <div className="left-section">
-            <div className="profile-picture">
+            <div className="profile-picture" style={{ backgroundImage: `url('http://localhost:8000${profilePictureUrl}')` }}>
               {/* Profile picture content */}
             </div>
             <button

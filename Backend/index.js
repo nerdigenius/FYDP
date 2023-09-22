@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const config = require("./config");
 const authRoutes = require("./src/routes/authRoutes");
-const userRoutes = require("./src/routes/userRoutes");
 const path = require("path");
 
 const app = express();
@@ -18,10 +17,7 @@ mongoose.connect(config.MONGODB_URI, {
 });
 app.use("/auth", authRoutes);
 
-app.use("/upload", userRoutes); // Mount the image upload routes at /upload
-
-// Serve uploaded images as static files
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use('/uploads', express.static(path.join(__dirname, 'src', 'uploads')));
 
 app.listen(config.PORT, () => {
   console.log(`Server is running on port ${config.PORT}`);

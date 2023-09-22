@@ -12,6 +12,7 @@ export const Login = (props) => {
       .then((response) => {
         // Handle the successful response here
         console.log('POST request successful:', response.data.token);
+        localStorage.setItem('token', response.data.token);
         window.alert(response.data.token)
         navigate("/personal")
       })
