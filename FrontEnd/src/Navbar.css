@@ -1,0 +1,225 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+}
+
+a {
+  color: rgb(231, 231, 231);
+}
+
+.logo {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.menubar {
+  height: 100px;
+  background-color: #001124;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.menubar ul {
+  display: flex;
+  margin-top: 0px;
+  gap: 1rem;
+  position: relative;
+}
+
+.menubar li {
+  position: relative;
+  cursor: pointer;
+}
+
+.menubar li::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #005ac7;
+  bottom: 0;
+  left: 0;
+  top: 30px;
+  transform: scaleX(0); /* Initially set the width to 0, so it's not visible */
+  transform-origin: left;
+  transition: transform 0.3s ease; /* Add a transition for smooth animation */
+}
+
+.menubar li:hover::before {
+  transform: scaleX(1); /* Expand the width to 100% on hover */
+}
+
+
+.menubar li:last-child {
+  margin-top: 0;
+  border: none;
+  width: 0%;
+  height: 0px;
+  bottom: 0;
+  left: 0;
+}
+
+.menubar li a {
+  margin-bottom: 5px;
+  font-size: 18px;
+  position: relative; /* Add this line */
+  overflow: hidden;
+}
+
+.vote_btn {
+  margin-top: -15px;
+  /* background: #015fc7; */
+  color: aliceblue;
+  width: 100px;
+  height: 50px;
+  border: none !important;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+#vote_btn{
+  border: none !important;
+}
+
+.ui-btn {
+  --btn-default-bg: #015fc7;
+  --btn-padding: 15px 20px;
+  --btn-hover-bg: rgb(128, 94, 252);
+  --btn-transition: 0.1s;
+  --btn-letter-spacing: 0.1rem;
+  --btn-animation-duration: 0.5s;
+  --btn-shadow-color: rgb(128, 94, 252);
+  --btn-shadow: 0 2px 10px 0 var(--btn-shadow-color);
+  --hover-btn-color: #ffffff;
+  --default-btn-color: #fff;
+  --font-size: 18px;
+  /* 👆 this field should not be empty */
+  --font-weight: 600;
+  /* 👆 this field should not be empty */
+}
+
+/* button settings 👆 */
+
+.ui-btn {
+  box-sizing: border-box;
+  padding: var(--btn-padding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--default-btn-color);
+  font: var(--font-weight) var(--font-size) var(--font-family);
+  background: var(--btn-default-bg);
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: var(--btn-transition);
+  overflow: hidden;
+  box-shadow: var(--btn-shadow);
+}
+
+.ui-btn span {
+  letter-spacing: var(--btn-letter-spacing);
+  transition: var(--btn-transition);
+  box-sizing: border-box;
+  position: relative;
+  background: inherit;
+}
+
+.ui-btn span::before {
+  box-sizing: border-box;
+  position: absolute;
+  content: '';
+  background: inherit;
+}
+
+.ui-btn:hover,
+.ui-btn:focus {
+  background: var(--btn-hover-bg);
+}
+
+.ui-btn:hover span,
+.ui-btn:focus span {
+  color: var(--hover-btn-color);
+}
+
+.ui-btn:hover span::before,
+.ui-btn:focus span::before {
+  animation: chitchat linear both var(--btn-animation-duration);
+}
+
+@keyframes chitchat {
+  0% {
+    content: '#';
+  }
+  5% {
+    content: '.';
+  }
+  10% {
+    content: '^{';
+  }
+  15% {
+    content: '-!';
+  }
+  20% {
+    content: '#$_';
+  }
+  25% {
+    content: '№:0';
+  }
+  30% {
+    content: '#{+.';}35%{content: '@}-?';
+  }
+  40% {
+    content: '?{4@%';
+  }
+  45% {
+    content: '=.,^!';
+  }
+  50% {
+    content: '?2@%';
+  }
+  55% {
+    content: '\;1}]';
+  }
+  60% {
+    content: '?{%:%';
+    right: 0;
+  }
+  65% {
+    content: '|{f[4';
+    right: 0;
+  }
+  70% {
+    content: '{4%0%';
+    right: 0;
+  }
+  75% {
+    content: "'1_0<";
+    right: 0;
+  }
+  80% {
+    content: '{0%';
+    right: 0;
+  }
+  85% {
+    content: "]>'";
+    right: 0;
+  }
+  90% {
+    content: '4';
+    right: 0;
+  }
+  95% {
+    content: '2';
+    right: 0;
+  }
+  100% {
+    content: '';
+    right: 0;
+  }
+}
