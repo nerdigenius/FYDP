@@ -19,6 +19,16 @@ contract Voting {
         mapping(address => bool) voters; // Mapping to track if an address has voted
     }
 
+    // Helper struct to store vote information.
+    struct VoteInfo {
+        address creator;
+        string title;
+        Candidate[] candidates;
+        address[] eligibleVoters;
+        uint256 votingStart;
+        uint256 votingEnd;
+    }
+
     // Declare an array to store all created votes.
     Vote[] public votes;
 
@@ -28,6 +38,9 @@ contract Voting {
     // Mapping from user addresses to arrays of vote indices they are involved in.
     mapping(address => uint256[]) public userToVotes;
 
+
+    // Declare a mapping to associate user addresses with the indices of votes they are involved in.
+    mapping(address => uint256[]) public userVotes;
 
     // Constructor function executed only once when the contract is deployed.
     constructor() {
@@ -104,8 +117,26 @@ contract Voting {
         return votes.length;
     }
 
-    function getUserVotes(address _user) public view returns (uint256[] memory) {
-        return userToVotes[_user];
+    // Function to get all votes related to a specific user.
+    function getUserVotes(address _user) public view returns (VoteInfo[] memory) {
+        uint256[] memory voteIndices = userToVotes[_user];
+        VoteInfo[] memory userVoteInfo = new VoteInfo[](voteIndices.length);
+
+        for (uint256 i = 0; i < voteIndices.length; i++) {
+            uint256 voteIndex = voteIndices[i];
+            (address creator, string memory title, Candidate[] memory candidates, address[] memory eligibleVoters, uint256 votingStart, uint256 votingEnd) = getVote(voteIndex);
+            
+            userVoteInfo[i] = VoteInfo({
+                creator: creator,
+                title: title,
+                candidates: candidates,
+                eligibleVoters: eligibleVoters,
+                votingStart: votingStart,
+                votingEnd: votingEnd
+            });
+        }
+
+        return userVoteInfo;
     }
 
 
