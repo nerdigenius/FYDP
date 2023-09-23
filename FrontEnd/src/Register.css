@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-image: url(../images/reg.png);
+  background-image: url(./images/reg.png);
   background-repeat: no-repeat;
   background-position: 25%;
   background-color: #ecf2ff;
@@ -45,14 +45,14 @@
 }
 
 .reg_form .signup_btn:hover {
-  background-image: linear-gradient(65deg, #b9b5f9, #5c5cfc 68%,  #3761b4);
+  background-image: linear-gradient(65deg, #b9b5f9, #5c5cfc 68%, #3761b4);
   color: rgb(224, 224, 224);
   transition: 0.3s;
 }
 
-.reg_form .login_btn{
-    background: none;
-    border: none;
-    color: #2D12D2;
-    cursor: pointer;
+.reg_form .login_btn {
+  background: none;
+  border: none;
+  color: #2d12d2;
+  cursor: pointer;
 }

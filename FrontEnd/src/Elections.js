@@ -36,10 +36,6 @@ export const Elections = () => {
               {hostedElections.map((election) => (
                 <li key={election.id}>
                   <a href={election.link}>{election.title}</a>
-                  <label class="switch">
-                    <input type="checkbox" />
-                    <span class="slider"></span>
-                  </label>
                 </li>
               ))}
             </ul>
