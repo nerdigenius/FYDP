@@ -12,8 +12,12 @@ import lp from './images/Low Price.png'
 import reg from './images/registration 1.png'
 import tspan from './images/Time Span.png'
 import scrnopt from './images/dashicons_screenoptions.png'
+import { useNavigate } from 'react-router-dom'
 
 export const Welcome = () => {
+  const navigate = useNavigate()
+  
+  
   return (
     <div className="Welcome">
       <section>
@@ -26,10 +30,10 @@ export const Welcome = () => {
             <br />
             <br />
             <div className="buttons">
-              <a className="register_button" href="Register.js">
+              <a className="register_button" href="/signup">
                 Register
               </a>
-              <a href="Login.js" className="login_button">
+              <a href="/login" className="login_button">
                 Login
               </a>
             </div>

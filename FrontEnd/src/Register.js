@@ -79,7 +79,7 @@ export const Register = (props) => {
         <br />
         <button
           className="login_btn"
-          onClick={() => window.location.href = '/'}
+          onClick={() => window.location.href = '/login'}
         >
           Already have an account? Login
         </button>

@@ -10,16 +10,17 @@ import { Welcome } from './Welcome'
 function App() {
   return (
     <div className="App">
-     
-
-      <BrowserRouter>
+      <Elections />
+      
+      {/* <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Welcome />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Register />} />
           <Route path="/personal" element={<Personal />} />
           <Route path="/elections" element={<Elections />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
     </div>
   )
 }

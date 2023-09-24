@@ -6,7 +6,6 @@
 
 .Elections {
   background-color: #001124;
-  height: 100vh;
 }
 
 /* Style the Active Elections and Hosted Elections sections */
@@ -21,11 +20,16 @@
 }
 
 /* Style the section titles */
-h1 {
-  font-size: 24px;
-  margin-bottom: 10px;
+.header {
+  margin-left: 25%;
+  width: 1000px;
+  font-size: 28px;
+  padding-bottom: 20px;
+  margin-bottom: 50px;
   color: rgb(231, 231, 231);
-  border-bottom: 2px solid #e9e7e7;
+  border-bottom: 5px solid #ecf2ff;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 
 /* Style the election list */
@@ -42,44 +46,198 @@ h1 {
 /* Style the election list items */
 .active_elec li {
   margin: 25px;
+  line-height: 80px;
 }
 
-.active_elec h3 {
-  font-weight: 700;
-  font-size: 26px;
-  text-decoration: none;
-  color: #d2d3d3;
-  transition: color 0.3s ease;
+.active_elec .active_btn {
+  font-family:'OCR A Std', sans-serif;
+  padding: 17px 40px;
+  border-radius: 50px;
+  border: 0;
+  background-color: white;
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 20px;
+  transition: all 0.5s ease;
+  cursor: pointer;
 }
 
 /* Change link color on hover */
-.active_elec h3:hover {
-  color: #015fc7;
+.active_elec .active_btn:hover {
+  letter-spacing: 3px;
+  background-color: #015fc7;
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+}
+
+.active_elec .active_btn:active {
+  letter-spacing: 3px;
+  background-color: hsl(261deg 80% 48%);
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+  transform: translateY(10px);
+  transition: 100ms;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Semi-transparent background overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Ensure the pop-up appears above other elements */
+  opacity: 0; /* Initially, set opacity to 0 to make it invisible */
+  visibility: hidden; /* Initially, set visibility to hidden */
+}
+
+.popup.show {
+  opacity: 1; /* Set opacity to 1 to make it visible */
+  visibility: visible; /* Set visibility to visible */
+}
+
+.popup-content {
+  background-color: #fff; /* White background for the pop-up */
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  width: 39%;
+  height: 80vh;
+  text-align: center;
+  overflow: scroll;
+  scrollbar-color: #015fc7;
+}
+
+.popup h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.popup-content .close_btn {
+  position: absolute;
+  top: 11%;
+  right: 32%;
+  background-color: #6c14dc;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.candidate_list li {
+  float: left;
+}
+
+.candidate_list .candidate {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ccc;
+  margin: 10px;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border-radius: 15px;
+  position: relative;
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+}
+
+.candidate_list .candidate.selected {
+  background-color: #015fc7;
+  color: #fff;
+  border-color: #015fc7;
+}
+
+.candidate_list .candidate.disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.candidate_list .vote-button {
+  display: none;
+  background-color: #6c14dc;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 0.2s ease-in-out;
+}
+
+.candidate_list .candidate:hover {
+  background-color: #015fc7;
+  color: whitesmoke;
+  transition: all 0.2s ease-in-out;
+}
+
+.candidate_list .candidate:hover .vote-button {
+  display: block;
+}
+
+.candidate_list .vote-button:hover {
+  background-color: #6c14dc;
 }
 
 .hosted_elec li {
-  margin: 35px;
+  margin: 25px;
+  line-height: 80px;
 }
 
 /* Style the election links */
 
 .hosted_elec li {
   line-height: 100px;
+  font-family: 'OCR A Std', sans-serif;
+  font-size: 20px;
 }
 
-.hosted_elec a {
-  background: #c5c5c5;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 26px;
-  color: #191a1a;
-  transition: color 0.3s ease;
-  border: 4px solid #015fc7;
-  border-radius: 8px;
-  padding: 15px 150px 15px 150px;
+.hosted_elec .hosted_btn {
+  font-family:'OCR A Std', sans-serif;
+  padding: 17px 40px;
+  border-radius: 50px;
+  border: 0;
+  background-color: white;
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 20px;
+  transition: all 0.5s ease;
+  cursor: pointer;
 }
 
 /* Change link color on hover */
-.hosted_elec a:hover {
-  color: #015fc7;
+.hosted_elec .hosted_btn:hover {
+  letter-spacing: 3px;
+  background-color: #015fc7;
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+}
+
+.hosted_elec .hosted_btn:active {
+  letter-spacing: 3px;
+  background-color: hsl(261deg 80% 48%);
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+  transform: translateY(10px);
+  transition: 100ms;
 }
