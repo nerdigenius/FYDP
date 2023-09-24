@@ -241,3 +241,72 @@
   transform: translateY(10px);
   transition: 100ms;
 }
+
+.create_bar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 40%;
+  padding-bottom: 50px;
+}
+
+
+.create_btn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: .3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: #015fc7;
+}
+
+.create_btn .create_sign{
+  width: 100%;
+  font-size: 2em;
+  color: white;
+  transition-duration: .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create_btn .create_text{
+  position: absolute;
+  opacity: 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 500;
+  transition-duration: .3s;
+}
+
+.create_btn:hover {
+  width: 145px;
+  border-radius: 15px;
+  transition-duration: .3s;
+  box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+}
+
+.create_btn:hover .create_sign {
+  width: 30%;
+  transition-duration: .3s;
+  padding-left: 100px;
+}
+/* hover effect button's text */
+.create_btn:hover .create_text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: .3s;
+  padding-right: 20px;
+}
+/* button click effect*/
+.create_btn:active {
+  transform: translate(2px ,2px);
+}
+
