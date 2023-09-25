@@ -9,10 +9,8 @@ import { Welcome } from './Welcome'
 
 function App() {
   return (
-    <div className="App">
-      <Elections />
-      
-      {/* <BrowserRouter>
+    <div className="App">      
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/login" element={<Login />} />
@@ -20,7 +18,7 @@ function App() {
           <Route path="/personal" element={<Personal />} />
           <Route path="/elections" element={<Elections />} />
         </Routes>
-      </BrowserRouter> */}
+      </BrowserRouter>
     </div>
   )
 }
