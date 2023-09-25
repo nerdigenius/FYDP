@@ -162,6 +162,7 @@ export const Elections = () => {
           </div>
         </div>
       )}
+
       <section>
         <div className="hosted_elec">
           <h1 className="header">Hosted Elections</h1>
@@ -175,14 +176,6 @@ export const Elections = () => {
               </li>
             ))}
           </ul>
-        </div>
-      </section>
-      <section>
-        <div className='create_bar'>
-          <button className="create_btn">
-            <div className="create_sign">+</div>
-            <div className="create_text">Create</div>
-          </button>
         </div>
       </section>
     </div>
