@@ -1,36 +1,40 @@
-import './Login.css'
+import './Login.css';
 import axios from 'axios';
-import { useState } from 'react'
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export const Login = (props) => {
-  const navigate = useNavigate ();
-  const [email, setEmail] = useState('')
-  const [password, setPass] = useState('')
-  function sendPostRequest(data) {
-    axios.post('http://localhost:8000/auth/login', data)
-      .then((response) => {
-        // Handle the successful response here
-        console.log('POST request successful:', response.data.token);
-        localStorage.setItem('token', response.data.token);
-        window.alert(response.data.token)
-        navigate("/personal")
-      })
-      .catch((error) => {
-        // Handle any errors here
-        console.error('Error sending POST request:', error.message);
-        window.alert(error.message)
-      });
-  }
+export const Login = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  
+
+  const sendPostRequest = async (data) => {
+    try {
+      setLoading(true);
+      const response = await axios.post('http://localhost:8000/auth/login', data);
+      await localStorage.setItem('token', response.data.token);
+      window.location.href='/personal'
+      
+    } catch (error) {
+      console.log(error)
+      setError('Invalid email or password. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(email)
-    let data={"email":email,
-    "password":password
-  }
-  sendPostRequest(data)
-  }
+    e.preventDefault();
+    setError(''); // Clear previous error message
+    const data = {
+      email: email,
+      password: password,
+    };
+    sendPostRequest(data);
+  };
 
   return (
     <div className="form_page">
@@ -44,6 +48,7 @@ export const Login = (props) => {
           name="email"
           id="email"
           placeholder="youremail@email.com"
+          required
         />
         <br />
         <br />
@@ -53,24 +58,23 @@ export const Login = (props) => {
           placeholder="******"
           type="password"
           value={password}
-          onChange={(e) => setPass(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           name="password"
           id="password"
+          required
         />
         <br />
         <br />
-        <button className="login_btn" type="submit">
-          Login
+        {error && <p className="error-message">{error}</p>}
+        <button className="login_btn" type="submit" disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
         </button>
         <br />
         <br />
-        <button
-          className="reg_btn"
-          onClick={() =>navigate('/signup')}
-        >
+        <button className="reg_btn" onClick={() => navigate('/signup')}>
           Don't have an account? Signup
         </button>
       </form>
     </div>
-  )
-}
+  );
+};

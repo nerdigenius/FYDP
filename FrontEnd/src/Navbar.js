@@ -1,11 +1,27 @@
 import React, { useState } from 'react'
 import './Navbar.css'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export const Navbar = () => {
   const [isConnected, setIsConnected] = useState(false)
+  const navigate=useNavigate()
 
   const handleToggleConnection = () => {
     setIsConnected((prevIsConnected) => !prevIsConnected)
+  }
+
+  const handleLogout = async() =>{
+    try {
+      // Make a POST request to the logout endpoint
+      await axios.post('http://localhost:8000/auth/logout');
+  
+      localStorage.removeItem('token')
+      navigate('/') // Assuming you have defined a history object for navigation
+    } catch (error) {
+      console.error('Logout failed:', error);
+      window.alert(error)
+    }
   }
 
   return (

@@ -38,6 +38,16 @@ async function login(req, res) {
     res.status(500).json({ error: 'Error logging in' });
   }
 }
+//
+async function logout(req, res) {
+  
+  res.clearCookie('token'); 
+
+
+  res.status(200).json({ message: 'Logged out successfully' });
+}
+
+// image upload
 
 async function uploadImage(req, res) {
   try {
@@ -108,4 +118,4 @@ async function getUserImage(req, res) {
     res.status(500).json({ message: 'Server error' });
   }
 }
-module.exports = { signup, login, uploadImage, getUserImage };
+module.exports = { signup, login, uploadImage, getUserImage ,logout};
