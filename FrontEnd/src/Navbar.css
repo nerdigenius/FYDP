@@ -249,7 +249,7 @@ a {
 }
 /* hover effect on button width */
 .logout:hover {
-  width: 145px;
+  width: 170px;
   border-radius: 40px;
   transition-duration: .3s;
 }

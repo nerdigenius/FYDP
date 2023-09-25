@@ -33,9 +33,6 @@ export const Navbar = () => {
               <a href="/elections">Elections</a>
             </li>
             <li>
-              <a href="#">Your Elections</a>
-            </li>
-            <li>
               <button class="logout">
                 <div class="sign">
                   <svg viewBox="0 0 512 512">

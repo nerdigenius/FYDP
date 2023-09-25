@@ -6,11 +6,12 @@ import { Register } from './Register.js'
 import { Personal } from './Personal'
 import { Elections } from './Elections'
 import { Welcome } from './Welcome'
+import { UrElections } from './UrElections'
 
 function App() {
   return (
     <div className="App">
-      <Elections />
+      <Elections/>
       
       {/* <BrowserRouter>
         <Routes>

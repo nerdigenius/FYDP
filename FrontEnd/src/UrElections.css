@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cand_list{
+    margin-left: 24%;
+    display: flex;
+    width: 50%;
+    background: #000;
+    color: whitesmoke;
+}
+
+.cand_list .cand_title{
+    font-size: 28px;
+}
