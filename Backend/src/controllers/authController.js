@@ -47,7 +47,43 @@ async function logout(req, res) {
   res.status(200).json({ message: 'Logged out successfully' });
 }
 
-// image upload
+//get User Info
+
+async function getUserInfo(req, res) {
+  const token = req.header('Authorization'); // Extract token from the 'Authorization' header
+
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  // Verify the JWT token
+  jwt.verify(token, config.JWT_SECRET, async (err, decodedToken) => {
+    if (err) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+
+    const userId = decodedToken.userId;
+
+    try {
+      // Fetch the user from the database
+      const user = await User.findById(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Respond with the user information
+      let data={"username":user.username,"email":user.email}
+      return res.status(200).json(data);
+    } catch (error) {
+      // Handle any errors that occur during database retrieval
+      console.error(error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+}
+
+// User image upload
 
 async function uploadImage(req, res) {
   try {
@@ -118,4 +154,4 @@ async function getUserImage(req, res) {
     res.status(500).json({ message: 'Server error' });
   }
 }
-module.exports = { signup, login, uploadImage, getUserImage ,logout};
+module.exports = { signup, login, uploadImage, getUserImage ,logout,getUserInfo};

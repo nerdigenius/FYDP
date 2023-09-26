@@ -1,102 +1,134 @@
-import './Personal.css'
-import { useState,useEffect } from 'react'
-import { Navbar } from './Navbar'
-import axios from 'axios'
+import "./Personal.css";
+import { useState, useEffect } from "react";
+import { Navbar } from "./Navbar";
+import axios from "axios";
 
 export const Personal = () => {
+  const [profilePictureUrl, setProfilePictureUrl] = useState("");
 
-  const [profilePictureUrl, setProfilePictureUrl] = useState('');
-
-  const [isEditMode, setIsEditMode] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false);
   // User's personal information data (initial values)
   const [userData, setUserData] = useState({
-    name: 'John Doe',
-    email: 'johndoe@example.com',
+    name: "John Doe",
+    email: "johndoe@example.com",
     // Add more fields as needed
-  })
+  });
 
   // Function to handle changes in the form fields
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setUserData({
       ...userData,
       [name]: value,
-    })
-  }
+    });
+  };
 
   // Function to toggle edit mode
   const toggleEditMode = () => {
-    setIsEditMode(!isEditMode)
-  }
+    setIsEditMode(!isEditMode);
+  };
 
   const handlePhotoUpload = () => {
     // Trigger the file input when the button is clicked
-    const fileInput = document.getElementById('photo-upload')
-    fileInput.click()
-  }
+    const fileInput = document.getElementById("photo-upload");
+    fileInput.click();
+  };
 
   const handlePhotoChange = (event) => {
-    const file = event.target.files[0]
+    const file = event.target.files[0];
 
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       const formData = new FormData();
-      formData.append('profilePicture', file);
+      formData.append("profilePicture", file);
 
       reader.onload = (e) => {
-        const newProfilePictureUrl = e.target.result
-        const profilePictureElement = document.querySelector('.profile-picture')
-        const token = localStorage.getItem('token');
-        console.log("token:::"+token)
+        const newProfilePictureUrl = e.target.result;
+        const profilePictureElement =
+          document.querySelector(".profile-picture");
+        const token = localStorage.getItem("token");
+        console.log("token:::" + token);
 
-        axios.post('http://localhost:8000/auth/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: token, 
-        },
-      })
-        .then((response) => {
-          console.log(response)
-          // Handle success (e.g., show a success message)
-        })
-        .catch((error) => {
-          console.log(error)
-          // Handle error (e.g., show an error message)
-        })
+        axios
+          .post("http://localhost:8000/auth/upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: token,
+            },
+          })
+          .then((response) => {
+            console.log(response);
+            // Handle success (e.g., show a success message)
+          })
+          .catch((error) => {
+            console.log(error);
+            // Handle error (e.g., show an error message)
+          });
 
         // Set the selected photo as the source of the "profile-picture" element
         if (profilePictureElement) {
-          profilePictureElement.style.backgroundImage = `url('${newProfilePictureUrl}')`
+          profilePictureElement.style.backgroundImage = `url('${newProfilePictureUrl}')`;
         }
 
         // You can also update the UI state or perform other actions as needed.
         // For example, if you're using React state:
         // this.setState({ profilePictureUrl: newProfilePictureUrl });
-      }
+      };
 
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(file);
     }
-  }
-
+  };
 
   useEffect(() => {
     // Fetch the profile picture URL here
-    const token = localStorage.getItem('token'); // Assuming you stored the JWT token in localStorage
-  
+    const token = localStorage.getItem("token"); // Assuming you stored the JWT token in localStorage
+
     if (token) {
-      axios.get('http://localhost:8000/auth/getImage', {
-        headers: {
-          Authorization: token,
-        },
-      })
+      axios
+        .get("http://localhost:8000/auth/getImage", {
+          headers: {
+            Authorization: token,
+          },
+        })
         .then((response) => {
           // Update the state variable with the profile picture URL
-          console.log(response.data.profilePictureUrl)
+          console.log(response.data.profilePictureUrl);
           setProfilePictureUrl(response.data.profilePictureUrl);
         })
         .catch((error) => {
-          console.error('Error fetching profile picture:', error);
+          console.error("Error fetching profile picture:", error);
           // Handle the error, e.g., show a default profile picture
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios
+        .get("http://localhost:8000/auth/user-info", {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((response) => {
+          // Handle successful response
+          const { email, username } = response.data;
+          setUserData({
+            ...userData,
+            email: email, // Update the email field
+            name: username, // Update the username field (assuming it's present in your userData state)
+          });
+          console.log(response.data);
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            // Handle unauthorized access (e.g., show a message or redirect to login)
+            console.error("Unauthorized access. Please log in.");
+          } else {
+            // Handle other errors
+            console.error("Error fetching user info:", error);
+          }
         });
     }
   }, []);
@@ -107,7 +139,12 @@ export const Personal = () => {
         <Navbar></Navbar>
         <div className="personal-info">
           <div className="left-section">
-            <div className="profile-picture" style={{ backgroundImage: `url('http://localhost:8000${profilePictureUrl}')` }}>
+            <div
+              className="profile-picture"
+              style={{
+                backgroundImage: `url('http://localhost:8000${profilePictureUrl}')`,
+              }}
+            >
               {/* Profile picture content */}
             </div>
             <button
@@ -139,7 +176,7 @@ export const Personal = () => {
               type="file"
               id="photo-upload"
               accept="image/*"
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
               onChange={handlePhotoChange}
             />
 
@@ -149,7 +186,7 @@ export const Personal = () => {
                   <path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"></path>
                 </svg>
               </span>
-              <p class="text">{isEditMode ? 'Save' : 'Edit'}</p>
+              <p class="text">{isEditMode ? "Save" : "Edit"}</p>
             </button>
           </div>
           <div className="right-section">
@@ -178,9 +215,9 @@ export const Personal = () => {
               </div>
             </form>
           </div>
-        </div>        
+        </div>
       </section>
     </div>
-  )
-}
-export default Personal
+  );
+};
+export default Personal;
