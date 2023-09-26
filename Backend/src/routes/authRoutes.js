@@ -13,5 +13,6 @@ router.post('/login', authController.login);
 router.post('/upload', upload.single('profilePicture'),authController.uploadImage)
 router.get('/getImage', authController.getUserImage)
 router.post('/logout', authController.logout);
+router.get('/user-info',authController.getUserInfo)
 
 module.exports = router;

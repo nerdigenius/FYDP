@@ -98,6 +98,19 @@ export const Personal = () => {
           console.error('Error fetching profile picture:', error);
           // Handle the error, e.g., show a default profile picture
         });
+        axios.get('http://localhost:8000/auth/user-info', {
+        headers: {
+          Authorization: token,
+        },
+      })
+        .then((response) => {
+          // Update the state variable with the profile picture URL
+          setUserData(response.data);
+        })
+        .catch((error) => {
+          console.error('Error fetching user data:', error);
+         
+        });
     }
   }, []);
 
