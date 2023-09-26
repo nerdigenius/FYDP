@@ -73,7 +73,8 @@ async function getUserInfo(req, res) {
       }
 
       // Respond with the user information
-      return res.status(200).json({ user });
+      let data={"username":user.username,"email":user.email}
+      return res.status(200).json(data);
     } catch (error) {
       // Handle any errors that occur during database retrieval
       console.error(error);

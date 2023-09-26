@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const config = require("./config");
 const authRoutes = require("./src/routes/authRoutes");
 const path = require("path");
+const contractRoutes = require('./src/routes/contractRoutes')
 
 const app = express();
 const cors = require("cors");
@@ -19,6 +20,7 @@ app.use("/auth", authRoutes);
 
 app.use('/uploads', express.static(path.join(__dirname, 'src', 'uploads')));
 
+app.use('/contract',contractRoutes)
 app.listen(config.PORT, () => {
   console.log(`Server is running on port ${config.PORT}`);
 });
