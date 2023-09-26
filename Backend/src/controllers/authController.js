@@ -49,9 +49,10 @@ async function logout(req, res) {
 
 //get User Info
 
-async function getUserInfo(req,res){
-   const token = req.header
-   if (!token) {
+async function getUserInfo(req, res) {
+  const token = req.header('Authorization'); // Extract token from the 'Authorization' header
+
+  if (!token) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
@@ -63,13 +64,22 @@ async function getUserInfo(req,res){
 
     const userId = decodedToken.userId;
 
-    // Fetch the user from the database
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    try {
+      // Fetch the user from the database
+      const user = await User.findById(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Respond with the user information
+      return res.status(200).json({ user });
+    } catch (error) {
+      // Handle any errors that occur during database retrieval
+      console.error(error);
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
-    return user
-  })
+  });
 }
 
 // User image upload
