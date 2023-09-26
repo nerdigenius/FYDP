@@ -54,6 +54,7 @@ contract Voting {
     }
 
     // Function to start a new vote with a title, candidate names, and duration.
+    // Function to start a new vote with a title, candidate names, and duration.
     function startVote(string memory _title, string[] memory _candidateNames, uint256 _durationInMinutes) public {
         require(_candidateNames.length > 0, "At least one candidate is required.");
         
@@ -64,6 +65,9 @@ contract Voting {
         newVote.votingStart = block.timestamp; // Record the start time of the vote.
         newVote.votingEnd = block.timestamp + (_durationInMinutes * 1 minutes); // Calculate the end time of the vote.
 
+        // Add the creator's address to the eligibleVoters array.
+        newVote.eligibleVoters.push(msg.sender);
+
         // Add the provided candidate names to the candidates array of the new vote.
         for (uint256 i = 0; i < _candidateNames.length; i++) {
             newVote.candidates.push(Candidate({
@@ -71,9 +75,11 @@ contract Voting {
                 voteCount: 0
             }));
         }
-         // Map the vote index to the creator's and eligible voters' addresses.
+
+        // Map the vote index to the creator's and eligible voters' addresses.
         userToVotes[msg.sender].push(votes.length - 1);
     }
+
 
     // Function to add eligible voters to an existing vote.
     function addEligibleVoters(uint256 _voteIndex, address[] memory _newEligibleVoters) public {
