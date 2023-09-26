@@ -38,6 +38,8 @@ async function createVoteInstance(req, res) {
         return res.status(404).json({ message: "User not found" });
       }
 
+      const startVote = await contractInstance.startVote(title, candidateNames, durationInMinutes);
+
       // Respond with the user information
       let data = { username: user.username, email: user.email };
       return res.status(200).json(data);

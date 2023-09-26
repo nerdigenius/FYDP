@@ -55,12 +55,12 @@ contract Voting {
 
     // Function to start a new vote with a title, candidate names, and duration.
     // Function to start a new vote with a title, candidate names, and duration.
-    function startVote(string memory _title, string[] memory _candidateNames, uint256 _durationInMinutes) public {
+    function startVote(address _creator,string memory _title, string[] memory _candidateNames, uint256 _durationInMinutes) public {
         require(_candidateNames.length > 0, "At least one candidate is required.");
         
         // Create a new vote instance and store it in the votes array.
         Vote storage newVote = votes.push();
-        newVote.creator = msg.sender; // Set the creator's address.
+        newVote.creator = _creator; // Set the creator's address.
         newVote.title = _title; // Set the vote title.
         newVote.votingStart = block.timestamp; // Record the start time of the vote.
         newVote.votingEnd = block.timestamp + (_durationInMinutes * 1 minutes); // Calculate the end time of the vote.

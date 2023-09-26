@@ -113,7 +113,7 @@ export const Personal = () => {
         })
         .then((response) => {
           // Handle successful response
-          const { email, username } = response.data.user;
+          const { email, username } = response.data;
           setUserData({
             ...userData,
             email: email, // Update the email field
