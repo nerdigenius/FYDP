@@ -241,6 +241,11 @@
   transition: 100ms;
 }
 
+.create_bar{
+  margin-left: 60%;
+  padding-bottom: 50px;
+}
+
 .create_btn{
   display: flex;
   align-items: center;
