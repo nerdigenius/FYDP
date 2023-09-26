@@ -4,6 +4,10 @@
   font-size: 22px;
 }
 
+.Login{
+  font-family: 'OCR A Std', sans-serif;
+}
+
 .form_page {
   display: flex;
   flex-direction: column;
