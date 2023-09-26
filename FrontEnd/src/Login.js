@@ -37,44 +37,46 @@ export const Login = () => {
   };
 
   return (
-    <div className="form_page">
-      <form className="login_form" action="" onSubmit={handleSubmit}>
-        <label htmlFor="email">Email</label>
-        <br />
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          name="email"
-          id="email"
-          placeholder="youremail@email.com"
-          required
-        />
-        <br />
-        <br />
-        <label htmlFor="password">Password</label>
-        <br />
-        <input
-          placeholder="******"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          name="password"
-          id="password"
-          required
-        />
-        <br />
-        <br />
-        {error && <p className="error-message">{error}</p>}
-        <button className="login_btn" type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-        <br />
-        <br />
-        <button className="reg_btn" onClick={() => navigate('/signup')}>
-          Don't have an account? Signup
-        </button>
-      </form>
+    <div className="Login">
+      <div className="form_page">
+        <form className="login_form" action="" onSubmit={handleSubmit}>
+          <label htmlFor="email">Email</label>
+          <br />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            id="email"
+            placeholder="youremail@email.com"
+            required
+          />
+          <br />
+          <br />
+          <label htmlFor="password">Password</label>
+          <br />
+          <input
+            placeholder="******"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            id="password"
+            required
+          />
+          <br />
+          <br />
+          {error && <p className="error-message">{error}</p>}
+          <button className="login_btn" type="submit" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+          <br />
+          <br />
+          <button className="reg_btn" onClick={() => navigate('/signup')}>
+            Don't have an account? Signup
+          </button>
+        </form>
+      </div>
     </div>
-  );
+  )
 };

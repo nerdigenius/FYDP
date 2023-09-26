@@ -5,6 +5,10 @@
   text-decoration: none;
 }
 
+.Welcome{
+  font-family: 'OCR A Std', sans-serif;
+}
+
 .top {
   display: flex;
 }
