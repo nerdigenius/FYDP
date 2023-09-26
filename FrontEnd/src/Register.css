@@ -4,6 +4,10 @@
   font-size: 22px;
 }
 
+.Register{
+  font-family: 'OCR A Std', sans-serif;
+}
+
 .reg_page {
   display: flex;
   flex-direction: column;
@@ -18,6 +22,7 @@
 
 .reg_form {
   margin-left: 30%;
+  width: 20%;
 }
 
 .reg_form label {
@@ -42,6 +47,8 @@
   border-radius: 5px;
   cursor: pointer;
   transition: 0.3s;
+  margin-left: 22%;
+
 }
 
 .reg_form .signup_btn:hover {

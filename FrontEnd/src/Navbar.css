@@ -5,7 +5,11 @@
   text-decoration: none;
 }
 
-a {
+.Navbar{
+  font-family: 'OCR A Std', sans-serif;
+}
+
+.Navbar a {
   color: rgb(231, 231, 231);
 }
 
@@ -270,7 +274,6 @@ a {
 .logout:active {
   transform: translate(2px ,2px);
 }
-
 
 .menubar li:first-child:before {
   transform: scaleX(0);
