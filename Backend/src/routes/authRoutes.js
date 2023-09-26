@@ -12,5 +12,6 @@ router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 router.post('/upload', upload.single('profilePicture'),authController.uploadImage)
 router.get('/getImage', authController.getUserImage)
+router.post('/logout', authController.logout);
 
 module.exports = router;
