@@ -14,10 +14,7 @@ export const UrElections = () => {
   const [newCandidate, setNewCandidate] = useState('')
   const [walletAddresses, setWalletAddresses] = useState([])
   const [newWalletAddress, setNewWalletAddress] = useState('')
-  
   const [isEditable, setIsEditable] = useState(true)
-
-
 
   // Save candidates to localStorage whenever the candidates state changes
   useEffect(() => {
@@ -50,71 +47,126 @@ export const UrElections = () => {
     }
   }
 
+  // Save wallet addresses to localStorage whenever the walletAddresses state changes
+  useEffect(() => {
+    const savedWalletAddresses = localStorage.getItem('walletAddresses')
+    if (savedWalletAddresses) {
+      setWalletAddresses(JSON.parse(savedWalletAddresses))
+    }
+  }, [])
 
+  // Save wallet addresses to localStorage whenever the walletAddresses state changes
+  useEffect(() => {
+    localStorage.setItem('walletAddresses', JSON.stringify(walletAddresses))
+  }, [walletAddresses])
+
+  function Candidates({ candidates, onRemoveCandidate }) {
+    return (
+      <ul className="cand_box">
+        {candidates.map((candidate, index) => (
+          <li className="cand_item" key={index}>
+            <span>{candidate}</span>
+            <button
+              className="remove_btn"
+              onClick={() => onRemoveCandidate(index)}
+              disabled={!isEditable}
+            >
+              Remove
+            </button>
+          </li>
+        ))}
+      </ul>
+    )
+  }
 
   return (
     <div className="UrElections">
       <section>
-        <Navbar></Navbar>
+        <Navbar />
       </section>
       <section>
         <div className="top_bar">
           <h1>Candidates</h1>
           <div className="cand_list">
             <div className="cand_table">
-              <ul>
-                {candidates.map((candidate, index) => (
-                  <li className="cand_item" key={index}>
-                    <button>{candidate}</button>
-                    <button onClick={() => handleRemoveCandidate(index)}>
-                      Remove
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              <button onClick={() => setIsPopupOpen(true)}>Add +</button>
+              <Candidates
+                candidates={candidates}
+                onRemoveCandidate={handleRemoveCandidate}
+              />
+              <div className="add_stop_btns">
+                <button
+                  className="add_item_btn"
+                  onClick={() => setIsPopupOpen(true)}
+                  disabled={!isEditable}
+                >
+                  Add +
+                </button>
+                <button
+                  className="start_btn"
+                  onClick={() => setIsEditable(!isEditable)}
+                >
+                  {isEditable ? 'Start' : 'Stop'}
+                </button>
+              </div>
               {/* Place the pop-up code here */}
               {isPopupOpen && (
-                <div className="popup_cand">
-                  <input
-                    type="text"
-                    placeholder="Enter candidate name"
-                    value={newCandidate}
-                    onChange={(e) => setNewCandidate(e.target.value)}
-                  />
-                  <button onClick={handleAddCandidate}>Add Candidate</button>
-                  <button onClick={() => setIsPopupOpen(false)}>Close</button>
+                <div className="popup_cand show">
+                  <div className="pop_up_content">
+                    <input
+                      type="text"
+                      placeholder="Enter candidate name"
+                      value={newCandidate}
+                      onChange={(e) => setNewCandidate(e.target.value)}
+                      className="input_name"
+                    />
+                    <button
+                      className="add_cand_btn"
+                      onClick={handleAddCandidate}
+                    >
+                      Add Candidate
+                    </button>
+                    <button
+                      className="add_cand_btn"
+                      onClick={() => setIsPopupOpen(false)}
+                    >
+                      Close
+                    </button>
+                  </div>
                 </div>
               )}
-              <button onClick={() => setIsEditable(!isEditable)}>
-                {isEditable ? 'Stop' : 'Start'}
-              </button>
             </div>
           </div>
         </div>
-
+      </section>
+      <section>
         <div className="bottom_bar">
           <h1>Add Wallet Address</h1>
-          <input
-            type="text"
-            placeholder="Enter wallet address"
-            value={newWalletAddress}
-            onChange={(e) => setNewWalletAddress(e.target.value)}
-            disabled={!isEditable}
-          />
+          <div className="wallet_field">
+            <input
+              type="text"
+              placeholder="Enter wallet address"
+              value={newWalletAddress}
+              onChange={(e) => setNewWalletAddress(e.target.value)}
+              disabled={!isEditable}
+            />
+            <button
+              className="wallet_btn"
+              onClick={handleAddWalletAddress}
+              disabled={!isEditable}
+            >
+              Add +
+            </button>
+          </div>
 
-          <button onClick={handleAddWalletAddress} disabled={!isEditable}>
-            Add Wallet Address
-          </button>
-          <ul>
-            {walletAddresses.map((address, index) => (
-              <li key={index}>{address}</li>
-            ))}
-          </ul>
+          {/* Display Wallet Addresses */}
+          <div className="wallet_list">
+            <ul>
+              {walletAddresses.map((address, index) => (
+                <li key={index}>{address}</li>
+              ))}
+            </ul>
+          </div>
         </div>
-
-        {/* Display Wallet Addresses */}
-        <div></div>
       </section>
     </div>
   )
