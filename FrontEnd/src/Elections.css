@@ -14,6 +14,7 @@
   margin-top: 20px;
   margin-left: 32%;
   margin-bottom: 100px;
+
 }
 
 /* Style the section titles */
@@ -35,6 +36,7 @@
   padding: 0;
 }
 
+
 /* Style the election list items */
 .active_elec li {
   margin: 25px;
@@ -43,7 +45,7 @@
 }
 
 .active_elec .active_btn {
-  font-family: 'OCR A Std', sans-serif;
+  font-family:'OCR A Std', sans-serif;
   padding: 17px 40px;
   border-radius: 50px;
   border: 0;
@@ -79,7 +81,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background overlay */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Semi-transparent background overlay */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -186,7 +193,8 @@
   background-color: #6c14dc;
 }
 
-.hosted_elec {
+
+.hosted_elec{
   margin-top: 20px;
   margin-left: 32%;
 }
@@ -203,7 +211,7 @@
 }
 
 .hosted_elec .hosted_btn {
-  font-family: 'OCR A Std', sans-serif;
+  font-family:'OCR A Std', sans-serif;
   padding: 17px 40px;
   border-radius: 50px;
   border: 0;
@@ -233,12 +241,12 @@
   transition: 100ms;
 }
 
-.create_bar {
+.create_bar{
   margin-left: 62%;
   padding-bottom: 50px;
 }
 
-.create_btn {
+.create_btn{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -249,50 +257,50 @@
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition-duration: 0.3s;
+  transition-duration: .3s;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
   background-color: #015fc7;
 }
 
-.create_btn .create_sign {
+.create_btn .create_sign{
   width: 100%;
   font-size: 2em;
   color: white;
-  transition-duration: 0.3s;
+  transition-duration: .3s;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.create_btn .create_text {
+.create_btn .create_text{
   position: absolute;
   opacity: 0;
   color: white;
   font-size: 1.2em;
   font-weight: 500;
-  transition-duration: 0.3s;
+  transition-duration: .3s;
 }
 
 .create_btn:hover {
   width: 145px;
   border-radius: 15px;
-  transition-duration: 0.3s;
+  transition-duration: .3s;
   box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
 }
 
 .create_btn:hover .create_sign {
   width: 30%;
-  transition-duration: 0.3s;
+  transition-duration: .3s;
   padding-left: 100px;
 }
 /* hover effect button's text */
 .create_btn:hover .create_text {
   opacity: 1;
   width: 70%;
-  transition-duration: 0.3s;
+  transition-duration: .3s;
   padding-right: 20px;
 }
 /* button click effect*/
 .create_btn:active {
-  transform: translate(2px, 2px);
+  transform: translate(2px ,2px);
 }

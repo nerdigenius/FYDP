@@ -280,6 +280,7 @@
 }
 
 
+
 .connect-button {
   width: 135px;
   height: 35px;
@@ -288,16 +289,15 @@
 }
 
 .connect {
-  background:#5c5cfc;
+  background: linear-gradient(65deg, #b9b5f9, #5c5cfc 68%, #3761b4);
   color: white;
 }
 
 .disconnect {
-  background: #57c84db4;
+  background: linear-gradient(125deg, #83D475, #57C84D 68%, #2EB62C);
   color: white;
 }
 
 .connect-button:hover {
   filter: brightness(1.1);
-  transition: 0.3s ease;
 }
