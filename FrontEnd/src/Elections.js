@@ -2,8 +2,11 @@ import React from 'react'
 import { useState } from 'react'
 import './Elections.css'
 import { Navbar } from './Navbar'
+import { useNavigate } from 'react-router-dom'
 
 export const Elections = () => {
+  const navigate = useNavigate()
+
   // Active Elections
   const activeElections = [
     {
@@ -178,7 +181,7 @@ export const Elections = () => {
         </div>
       </section>
       <section>
-        <div className="create_bar">
+        <div className="create_bar" onClick={() => navigate('/urElections')}>
           <button className="create_btn">
             <div className="create_sign">+</div>
             <div className="create_text">Create</div>

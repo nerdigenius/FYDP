@@ -5,6 +5,8 @@ import { Register } from './Register.js';
 import { Personal } from './Personal';
 import { Elections } from './Elections';
 import { Welcome } from './Welcome';
+import {UrElections} from './UrElections.js'
+
 
 function App() {
   let isAuthenticated = localStorage.getItem('token');
@@ -19,7 +21,8 @@ function App() {
           <Route path="/signup" element={<Register />} />
           <Route path="/personal" element={isAuthenticated ? <Personal /> : <Navigate to="/login" />} />
           <Route path="/elections" element={isAuthenticated ? <Elections /> : <Navigate to="/login" />} />
-        
+          <Route path="/urElections" element={<UrElections />} />
+
         </Routes>
       </BrowserRouter>
     </div>
