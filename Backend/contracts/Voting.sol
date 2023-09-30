@@ -21,6 +21,7 @@ contract Voting {
 
     // Helper struct to store vote information.
     struct VoteInfo {
+        uint256 voteIndex;
         address creator;
         string title;
         Candidate[] candidates;
@@ -30,17 +31,17 @@ contract Voting {
     }
 
     // Declare an array to store all created votes.
-    Vote[] public votes;
+    Vote[] private votes;
 
     // Declare the contract owner's address.
-    address public owner;
+    address private owner;
 
     // Mapping from user addresses to arrays of vote indices they are involved in.
-    mapping(address => uint256[]) public userToVotes;
+    mapping(address => uint256[]) private userToVotes;
 
 
     // Declare a mapping to associate user addresses with the indices of votes they are involved in.
-    mapping(address => uint256[]) public userVotes;
+    mapping(address => uint256[]) private creatorVotes;
 
     // Constructor function executed only once when the contract is deployed.
     constructor() {
@@ -55,18 +56,17 @@ contract Voting {
 
     // Function to start a new vote with a title, candidate names, and duration.
     // Function to start a new vote with a title, candidate names, and duration.
-    function startVote(address _creator,string memory _title, string[] memory _candidateNames, uint256 _durationInMinutes) public {
+    function startVote(string memory _title, string[] memory _candidateNames, uint256 _durationInMinutes) public {
         require(_candidateNames.length > 0, "At least one candidate is required.");
         
         // Create a new vote instance and store it in the votes array.
         Vote storage newVote = votes.push();
-        newVote.creator = _creator; // Set the creator's address.
+        newVote.creator = msg.sender; // Set the creator's address.
         newVote.title = _title; // Set the vote title.
         newVote.votingStart = block.timestamp; // Record the start time of the vote.
         newVote.votingEnd = block.timestamp + (_durationInMinutes * 1 minutes); // Calculate the end time of the vote.
 
-        // Add the creator's address to the eligibleVoters array.
-        newVote.eligibleVoters.push(msg.sender);
+        
 
         // Add the provided candidate names to the candidates array of the new vote.
         for (uint256 i = 0; i < _candidateNames.length; i++) {
@@ -77,7 +77,7 @@ contract Voting {
         }
 
         // Map the vote index to the creator's and eligible voters' addresses.
-        userToVotes[msg.sender].push(votes.length - 1);
+        creatorVotes[msg.sender].push(votes.length - 1);
     }
 
 
@@ -124,26 +124,49 @@ contract Voting {
     }
 
     // Function to get all votes related to a specific user.
-    function getUserVotes(address _user) public view returns (VoteInfo[] memory) {
-        uint256[] memory voteIndices = userToVotes[_user];
-        VoteInfo[] memory userVoteInfo = new VoteInfo[](voteIndices.length);
+    function getUserVotes() public view returns (VoteInfo[] memory) {
+    uint256[] memory voteIndices = userToVotes[msg.sender];
+    VoteInfo[] memory userVoteInfo = new VoteInfo[](voteIndices.length);
 
-        for (uint256 i = 0; i < voteIndices.length; i++) {
-            uint256 voteIndex = voteIndices[i];
-            (address creator, string memory title, Candidate[] memory candidates, address[] memory eligibleVoters, uint256 votingStart, uint256 votingEnd) = getVote(voteIndex);
-            
-            userVoteInfo[i] = VoteInfo({
-                creator: creator,
-                title: title,
-                candidates: candidates,
-                eligibleVoters: eligibleVoters,
-                votingStart: votingStart,
-                votingEnd: votingEnd
-            });
-        }
-
-        return userVoteInfo;
+    for (uint256 i = 0; i < voteIndices.length; i++) {
+        uint256 voteIndex = voteIndices[i];
+        VoteInfo memory voteInfo;
+        
+        voteInfo.voteIndex = voteIndex;
+        voteInfo.creator = votes[voteIndex].creator;
+        voteInfo.title = votes[voteIndex].title;
+        voteInfo.candidates = votes[voteIndex].candidates;
+        voteInfo.eligibleVoters = votes[voteIndex].eligibleVoters;
+        voteInfo.votingStart = votes[voteIndex].votingStart;
+        voteInfo.votingEnd = votes[voteIndex].votingEnd;
+        
+        userVoteInfo[i] = voteInfo;
     }
+
+    return userVoteInfo;
+}
+
+function getCreatorVotes() public view returns (VoteInfo[] memory) {
+    uint256[] memory voteIndices = creatorVotes[msg.sender];
+    VoteInfo[] memory userVoteInfo = new VoteInfo[](voteIndices.length);
+
+    for (uint256 i = 0; i < voteIndices.length; i++) {
+        uint256 voteIndex = voteIndices[i];
+        VoteInfo memory voteInfo;
+        
+        voteInfo.voteIndex = voteIndex;
+        voteInfo.creator = votes[voteIndex].creator;
+        voteInfo.title = votes[voteIndex].title;
+        voteInfo.candidates = votes[voteIndex].candidates;
+        voteInfo.eligibleVoters = votes[voteIndex].eligibleVoters;
+        voteInfo.votingStart = votes[voteIndex].votingStart;
+        voteInfo.votingEnd = votes[voteIndex].votingEnd;
+        
+        userVoteInfo[i] = voteInfo;
+    }
+
+    return userVoteInfo;
+}
 
 
     // Function to get the details of a specific vote by its index.
