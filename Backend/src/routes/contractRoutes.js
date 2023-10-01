@@ -3,6 +3,8 @@ const router = express.Router();
 const contractController = require('../controllers/contractController');
 
 router.post('/create-votes',contractController.createVoteInstance)
-router.get('/get-votes',contractController.getVoteInstance)
+router.get('/get-creator-votes',contractController.getCreatorVotes)
+router.get('/get-user-votes',contractController.getUserVotes)
+router.post('/add-eligible-voters',contractController.addEligibleVoters)
 
 module.exports = router;

@@ -6,10 +6,10 @@ const contractAddress = process.env.CONTRACT_ADDRESS;
 
 const provider = new ethers.providers.JsonRpcProvider(API_URL);
 
-const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+// No need to create a signer using the PRIVATE_KEY here
 
 const { abi } = require("../../artifacts/contracts/Voting.sol/Voting.json");
-const contractInstance = new ethers.Contract(contractAddress, abi, signer);
+const contractInstance = new ethers.Contract(contractAddress, abi, provider); // Use the provider directly
 
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
@@ -41,11 +41,21 @@ async function createVoteInstance(req, res) {
       // Specify the gas limit when sending the transaction
       const gasLimit = 6721975; // You can adjust this value as needed
 
-      // Send the transaction with the specified gas limit
-      const startVoteTransaction = await contractInstance.startVote(address, title, candidateNames, durationInMinutes, { gasLimit });
+      // Create a signer using the user's address (public key)
+      const sender = provider.getSigner(address);
+
+      // Send the transaction to start a new vote
+      const startVoteTransaction = await contractInstance
+        .connect(sender)
+        .startVote(title, candidateNames, durationInMinutes, { gasLimit });
+
+      // Wait for the transaction to be mined
+      await startVoteTransaction.wait();
 
       // Respond with the transaction hash or other relevant information
-      return res.status(200).json({ transactionHash: startVoteTransaction.hash });
+      return res
+        .status(200)
+        .json({ transactionHash: startVoteTransaction.hash });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Internal Server Error" });
@@ -53,7 +63,7 @@ async function createVoteInstance(req, res) {
   });
 }
 
-async function getVoteInstance(req, res) {
+async function getUserVotes(req, res) {
   const token = req.header("Authorization");
 
   if (!token) {
@@ -74,17 +84,34 @@ async function getVoteInstance(req, res) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      const { address} = req.body;
-
       // Specify the gas limit when sending the transaction
       const gasLimit = 6721975; // You can adjust this value as needed
 
-      // Send the transaction with the specified gas limit
-      const getUserVotes = await contractInstance.getUserVotes(address, { gasLimit });
-      console.log(getUserVotes)
+      // Create a signer using the user's address (public key)
+      const { address } = req.body;
+      const sender = provider.getSigner(address); // Use the user's address
 
-      // Respond with the transaction hash or other relevant information
-      return res.status(200).json({getUserVotes });
+      // Send the transaction to get the user's votes
+      const getUserVotesResult = await contractInstance
+        .connect(sender)
+        .getUserVotes({ gasLimit });
+
+      // Transform the result into the desired JSON format
+      const formattedVotes = getUserVotesResult.map((vote) => ({
+        voteIndex: vote.voteIndex.toNumber(),
+        creator: vote.creator,
+        title: vote.title,
+        candidates: vote.candidates.map((candidate) => ({
+          name: candidate.name,
+          voteCount: candidate.voteCount.toNumber(),
+        })),
+        eligibleVoters: vote.eligibleVoters,
+        votingStart: vote.votingStart.toNumber(),
+        votingEnd: vote.votingEnd.toNumber(),
+      }));
+
+      // Respond with the result directly
+      return res.status(200).json({ getUserVotes: formattedVotes });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Internal Server Error" });
@@ -92,4 +119,113 @@ async function getVoteInstance(req, res) {
   });
 }
 
-module.exports = { createVoteInstance,getVoteInstance };
+async function getCreatorVotes(req, res) {
+  const token = req.header("Authorization");
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  jwt.verify(token, config.JWT_SECRET, async (err, decodedToken) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    const userId = decodedToken.userId;
+
+    try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const { address } = req.body;
+
+      // Specify the gas limit when sending the transaction
+      const gasLimit = 6721975; // You can adjust this value as needed
+
+      // Create a signer using the user's address (public key)
+      const sender = provider.getSigner(address);
+
+      // Send the transaction to get the creator's votes
+      const getCreatorVotesResult = await contractInstance
+        .connect(sender)
+        .getCreatorVotes({ gasLimit });
+
+        console.log(getCreatorVotesResult)
+
+        // Transform the result into the desired JSON format
+      // Transform the result into the desired JSON format
+      const formattedVotes = getCreatorVotesResult.map((vote) => ({
+        voteIndex: vote.voteIndex.toNumber(),
+        creator: vote.creator,
+        title: vote.title,
+        candidates: vote.candidates.map((candidate) => ({
+          name: candidate.name,
+          voteCount: candidate.voteCount.toNumber(),
+        })),
+        eligibleVoters: vote.eligibleVoters,
+        votingStart: vote.votingStart.toNumber(),
+        votingEnd: vote.votingEnd.toNumber(),
+      }));
+
+      // Respond with the result directly
+      return res.status(200).json({ getCreatorVotes: formattedVotes });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+}
+
+async function addEligibleVoters(req, res) {
+  const token = req.header("Authorization");
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  jwt.verify(token, config.JWT_SECRET, async (err, decodedToken) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    const userId = decodedToken.userId;
+
+    try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const {address, voteIndex, newEligibleVoters } = req.body;
+
+      // Specify the gas limit when sending the transaction
+      const gasLimit = 6721975; // You can adjust this value as needed
+
+      // Create a signer using the user's address (public key)
+      const sender = provider.getSigner(address); // Use the user's address
+
+      // Send the transaction to add eligible voters to the existing vote
+      const addEligibleVotersTransaction = await contractInstance
+        .connect(sender)
+        .addEligibleVoters(voteIndex, newEligibleVoters, { gasLimit });
+
+      // Wait for the transaction to be mined
+      await addEligibleVotersTransaction.wait();
+
+      // Respond with the transaction hash or other relevant information
+      return res
+        .status(200)
+        .json({ transactionHash: addEligibleVotersTransaction.hash });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+}
+
+
+module.exports = { createVoteInstance, getUserVotes, getCreatorVotes,addEligibleVoters };
