@@ -227,5 +227,49 @@ async function addEligibleVoters(req, res) {
   });
 }
 
+async function vote(req, res) {
+  const token = req.header("Authorization");
 
-module.exports = { createVoteInstance, getUserVotes, getCreatorVotes,addEligibleVoters };
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  jwt.verify(token, config.JWT_SECRET, async (err, decodedToken) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    const userId = decodedToken.userId;
+
+    try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const { address, voteIndex, candidateIndex } = req.body;
+
+      // Create a signer using the user's address (public key)
+      const sender = provider.getSigner(address);
+
+      // Create a contract instance
+      const contract = new ethers.Contract(contractAddress, contractABI, sender);
+
+      // Send the transaction to vote
+      const voteTransaction = await contract.vote(voteIndex, candidateIndex);
+
+      // Wait for the transaction to be mined
+      await voteTransaction.wait();
+
+      // Respond with a success message or other relevant information
+      return res.status(200).json({ message: "Vote successful!" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+}
+
+
+module.exports = { createVoteInstance, getUserVotes, getCreatorVotes,addEligibleVoters ,vote};
