@@ -253,11 +253,10 @@ async function vote(req, res) {
       // Create a signer using the user's address (public key)
       const sender = provider.getSigner(address);
 
-      // Create a contract instance
-      const contract = new ethers.Contract(contractAddress, contractABI, sender);
+    
 
       // Send the transaction to vote
-      const voteTransaction = await contract.vote(voteIndex, candidateIndex);
+      const voteTransaction = await contractInstance.connect(sender).vote(voteIndex, candidateIndex);
 
       // Wait for the transaction to be mined
       await voteTransaction.wait();
