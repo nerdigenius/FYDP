@@ -2,6 +2,7 @@ import React from 'react'
 import './UrElections.css'
 import { useState, useEffect } from 'react'
 import { Navbar } from './Navbar'
+import { useNavigate } from 'react-router-dom'
 
 export const UrElections = () => {
   // Add and Remove Candidates
@@ -15,6 +16,7 @@ export const UrElections = () => {
   const [walletAddresses, setWalletAddresses] = useState([])
   const [newWalletAddress, setNewWalletAddress] = useState('')
   const [isEditable, setIsEditable] = useState(true)
+  const navigate = useNavigate()
 
   // Save candidates to localStorage whenever the candidates state changes
   useEffect(() => {
@@ -39,6 +41,14 @@ export const UrElections = () => {
     }
   }
 
+  const handleStartStop = () => {
+    setIsEditable(!isEditable)
+    if (isEditable) {
+      // Redirect to the Elections page when starting
+      navigate('/elections')
+    }
+  }
+
   //Add wallet addresses List
   const handleAddWalletAddress = () => {
     if (newWalletAddress.trim() !== '') {
@@ -47,18 +57,30 @@ export const UrElections = () => {
     }
   }
 
-  // Save wallet addresses to localStorage whenever the walletAddresses state changes
-  useEffect(() => {
-    const savedWalletAddresses = localStorage.getItem('walletAddresses')
-    if (savedWalletAddresses) {
-      setWalletAddresses(JSON.parse(savedWalletAddresses))
-    }
-  }, [])
+  // const handleRemoveAddress = (index) => {
+  //   // Show a confirmation alert
+  //   const confirmRemove = window.confirm(
+  //     'Do you want to remove the wallet address?'
+  //   )
+  //   if (confirmRemove) {
+  //     const updatedWalletAddresses = [...walletAddresses]
+  //     updatedWalletAddresses.splice(index, 1)
+  //     setWalletAddresses(updatedWalletAddresses)
+  //   }
+  // }
 
-  // Save wallet addresses to localStorage whenever the walletAddresses state changes
-  useEffect(() => {
-    localStorage.setItem('walletAddresses', JSON.stringify(walletAddresses))
-  }, [walletAddresses])
+  // // Save wallet addresses to localStorage whenever the walletAddresses state changes
+  // useEffect(() => {
+  //   const savedWalletAddresses = localStorage.getItem('walletAddresses')
+  //   if (savedWalletAddresses) {
+  //     setWalletAddresses(JSON.parse(savedWalletAddresses))
+  //   }
+  // }, [])
+
+  // // Save wallet addresses to localStorage whenever the walletAddresses state changes
+  // useEffect(() => {
+  //   localStorage.setItem('walletAddresses', JSON.stringify(walletAddresses))
+  // }, [walletAddresses])
 
   function Candidates({ candidates, onRemoveCandidate }) {
     return (
@@ -101,10 +123,7 @@ export const UrElections = () => {
                 >
                   Add +
                 </button>
-                <button
-                  className="start_btn"
-                  onClick={() => setIsEditable(!isEditable)}
-                >
+                <button className="start_btn" onClick={handleStartStop}>
                   {isEditable ? 'Start' : 'Stop'}
                 </button>
               </div>
@@ -138,8 +157,8 @@ export const UrElections = () => {
           </div>
         </div>
       </section>
-      <section>
-        <div className="bottom_bar">
+      {/* <section> */}
+        {/* <div className="bottom_bar">
           <h1>Add Wallet Address</h1>
           <div className="wallet_field">
             <input
@@ -156,18 +175,26 @@ export const UrElections = () => {
             >
               Add +
             </button>
-          </div>
+          </div> */}
 
           {/* Display Wallet Addresses */}
-          <div className="wallet_list">
+          {/* <div className="wallet_list">
             <ul>
               {walletAddresses.map((address, index) => (
-                <li key={index}>{address}</li>
+                <li key={index}>
+                  {address}
+                  <button
+                    className="remove_btn"
+                    onClick={() => handleRemoveAddress(index)}
+                  >
+                    Remove
+                  </button>
+                </li>
               ))}
             </ul>
           </div>
-        </div>
-      </section>
+        </div> */}
+      {/* </section> */}
     </div>
   )
 }
