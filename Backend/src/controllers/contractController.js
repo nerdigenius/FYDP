@@ -36,7 +36,7 @@ async function createVoteInstance(req, res) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      const { address, title, candidateNames, durationInMinutes } = req.body;
+      const { address, title, candidateNames} = req.body;
 
       // Specify the gas limit when sending the transaction
       const gasLimit = 6721975; // You can adjust this value as needed
@@ -47,7 +47,7 @@ async function createVoteInstance(req, res) {
       // Send the transaction to start a new vote
       const startVoteTransaction = await contractInstance
         .connect(sender)
-        .startVote(title, candidateNames, durationInMinutes, { gasLimit });
+        .startVote(title, candidateNames, { gasLimit });
 
       // Wait for the transaction to be mined
       await startVoteTransaction.wait();
@@ -57,8 +57,19 @@ async function createVoteInstance(req, res) {
         .status(200)
         .json({ transactionHash: startVoteTransaction.hash });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal Server Error" });
+      if (error.error && error.error.data && error.error.data.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.error.data.reason,
+        });
+      } else if (error.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.reason,
+        });
+      } else {
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
     }
   });
 }
@@ -106,15 +117,25 @@ async function getUserVotes(req, res) {
           voteCount: candidate.voteCount.toNumber(),
         })),
         eligibleVoters: vote.eligibleVoters,
-        votingStart: vote.votingStart.toNumber(),
-        votingEnd: vote.votingEnd.toNumber(),
+        voteStatus:vote.voteStatus
       }));
 
       // Respond with the result directly
       return res.status(200).json({ getUserVotes: formattedVotes });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal Server Error" });
+      if (error.error && error.error.data && error.error.data.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.error.data.reason,
+        });
+      } else if (error.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.reason,
+        });
+      } else {
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
     }
   });
 }
@@ -166,15 +187,25 @@ async function getCreatorVotes(req, res) {
           voteCount: candidate.voteCount.toNumber(),
         })),
         eligibleVoters: vote.eligibleVoters,
-        votingStart: vote.votingStart.toNumber(),
-        votingEnd: vote.votingEnd.toNumber(),
+        voteStatus:vote.voteStatus
       }));
 
       // Respond with the result directly
       return res.status(200).json({ getCreatorVotes: formattedVotes });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal Server Error" });
+      if (error.error && error.error.data && error.error.data.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.error.data.reason,
+        });
+      } else if (error.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.reason,
+        });
+      } else {
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
     }
   });
 }
@@ -222,7 +253,20 @@ async function addEligibleVoters(req, res) {
         .json({ transactionHash: addEligibleVotersTransaction.hash });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: "Internal Server Error" });
+      if (error.error && error.error.data && error.error.data.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.error.data.reason,
+        });
+      } else if (error.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.reason,
+        });
+      } else {
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
+      
     }
   });
 }
@@ -253,10 +297,10 @@ async function vote(req, res) {
       // Create a signer using the user's address (public key)
       const sender = provider.getSigner(address);
 
-    
+      const gasLimit = 6721975; 
 
       // Send the transaction to vote
-      const voteTransaction = await contractInstance.connect(sender).vote(voteIndex, candidateIndex);
+      const voteTransaction = await contractInstance.connect(sender).vote(voteIndex, candidateIndex,{ gasLimit });
 
       // Wait for the transaction to be mined
       await voteTransaction.wait();
@@ -264,11 +308,85 @@ async function vote(req, res) {
       // Respond with a success message or other relevant information
       return res.status(200).json({ message: "Vote successful!" });
     } catch (error) {
+      console.log(error)
+      if (error.error && error.error.data && error.error.data.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.error.data.reason,
+        });
+      } else if (error.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.reason,
+        });
+      } else {
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
+    }
+  });
+}
+
+async function stopVote(req, res) {
+  const token = req.header("Authorization");
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  jwt.verify(token, config.JWT_SECRET, async (err, decodedToken) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    const userId = decodedToken.userId;
+
+    try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const {address, voteIndex, newEligibleVoters } = req.body;
+
+      // Specify the gas limit when sending the transaction
+      const gasLimit = 6721975; // You can adjust this value as needed
+
+      // Create a signer using the user's address (public key)
+      const sender = provider.getSigner(address); // Use the user's address
+
+      // Send the transaction to add eligible voters to the existing vote
+      const stopVoteTransaction = await contractInstance
+        .connect(sender)
+        .stopVote(voteIndex, { gasLimit });
+
+      // Wait for the transaction to be mined
+      await stopVoteTransaction.wait();
+
+      // Respond with the transaction hash or other relevant information
+      return res
+        .status(200)
+        .json({ transactionHash: stopVoteTransaction.hash });
+    } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: "Internal Server Error" });
+      if (error.error && error.error.data && error.error.data.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.error.data.reason,
+        });
+      } else if (error.reason) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+          error: error.reason,
+        });
+      } else {
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
+      
     }
   });
 }
 
 
-module.exports = { createVoteInstance, getUserVotes, getCreatorVotes,addEligibleVoters ,vote};
+
+module.exports = { createVoteInstance, getUserVotes, getCreatorVotes,addEligibleVoters ,vote,stopVote};

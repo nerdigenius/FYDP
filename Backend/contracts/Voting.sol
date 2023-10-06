@@ -14,8 +14,7 @@ contract Voting {
         string title; // Title of the vote
         Candidate[] candidates; // Array of candidates for the vote
         address[] eligibleVoters; // Array of addresses representing eligible voters
-        uint256 votingStart; // Timestamp when voting starts
-        uint256 votingEnd; // Timestamp when voting ends
+        bool voteStatus;
         mapping(address => bool) voters; // Mapping to track if an address has voted
     }
 
@@ -26,8 +25,7 @@ contract Voting {
         string title;
         Candidate[] candidates;
         address[] eligibleVoters;
-        uint256 votingStart;
-        uint256 votingEnd;
+        bool voteStatus;
     }
 
     // Declare an array to store all created votes.
@@ -56,15 +54,14 @@ contract Voting {
 
     // Function to start a new vote with a title, candidate names, and duration.
     // Function to start a new vote with a title, candidate names, and duration.
-    function startVote(string memory _title, string[] memory _candidateNames, uint256 _durationInMinutes) public {
+    function startVote(string memory _title, string[] memory _candidateNames) public {
         require(_candidateNames.length > 0, "At least one candidate is required.");
         
         // Create a new vote instance and store it in the votes array.
         Vote storage newVote = votes.push();
         newVote.creator = msg.sender; // Set the creator's address.
         newVote.title = _title; // Set the vote title.
-        newVote.votingStart = block.timestamp; // Record the start time of the vote.
-        newVote.votingEnd = block.timestamp + (_durationInMinutes * 1 minutes); // Calculate the end time of the vote.
+        newVote.voteStatus = true;
 
         
 
@@ -111,7 +108,7 @@ contract Voting {
         require(!voteInstance.voters[msg.sender], "You have already voted.");
         require(_candidateIndex < voteInstance.candidates.length, "Invalid candidate index.");
         // Check if the current timestamp is within the voting period.
-        require(voteInstance.votingStart > 0 && block.timestamp >= voteInstance.votingStart && block.timestamp < voteInstance.votingEnd, "Voting is not currently active.");
+        require(voteInstance.voteStatus=true, "Voting is not currently active.");
 
         // Increase the vote count for the selected candidate and mark the caller as a voter.
         voteInstance.candidates[_candidateIndex].voteCount++;
@@ -137,8 +134,7 @@ contract Voting {
         voteInfo.title = votes[voteIndex].title;
         voteInfo.candidates = votes[voteIndex].candidates;
         voteInfo.eligibleVoters = votes[voteIndex].eligibleVoters;
-        voteInfo.votingStart = votes[voteIndex].votingStart;
-        voteInfo.votingEnd = votes[voteIndex].votingEnd;
+        voteInfo.voteStatus = votes[voteIndex].voteStatus;
         
         userVoteInfo[i] = voteInfo;
     }
@@ -159,8 +155,8 @@ function getCreatorVotes() public view returns (VoteInfo[] memory) {
         voteInfo.title = votes[voteIndex].title;
         voteInfo.candidates = votes[voteIndex].candidates;
         voteInfo.eligibleVoters = votes[voteIndex].eligibleVoters;
-        voteInfo.votingStart = votes[voteIndex].votingStart;
-        voteInfo.votingEnd = votes[voteIndex].votingEnd;
+        voteInfo.voteStatus = votes[voteIndex].voteStatus;
+
         
         userVoteInfo[i] = voteInfo;
     }
@@ -170,7 +166,7 @@ function getCreatorVotes() public view returns (VoteInfo[] memory) {
 
 
     // Function to get the details of a specific vote by its index.
-    function getVote(uint256 _voteIndex) public view returns (address creator, string memory title, Candidate[] memory candidates, address[] memory eligibleVoters, uint256 votingStart, uint256 votingEnd) {
+    function getVote(uint256 _voteIndex) public view returns (address creator, string memory title, Candidate[] memory candidates, address[] memory eligibleVoters, bool voteStatus) {
         require(_voteIndex < votes.length, "Invalid vote index.");
         Vote storage voteInstance = votes[_voteIndex];
 
@@ -179,8 +175,7 @@ function getCreatorVotes() public view returns (VoteInfo[] memory) {
             voteInstance.title,
             voteInstance.candidates,
             voteInstance.eligibleVoters,
-            voteInstance.votingStart,
-            voteInstance.votingEnd
+            voteInstance.voteStatus
             );
     }
 
@@ -193,4 +188,15 @@ function getCreatorVotes() public view returns (VoteInfo[] memory) {
         }
         return false;
     }
+
+    function stopVote(uint256 _voteIndex) public {
+        require(_voteIndex < votes.length, "Invalid vote index.");
+        Vote storage voteInstance = votes[_voteIndex];
+
+        // Ensure that the caller is the creator of the vote.
+        require(msg.sender == voteInstance.creator, "Only the vote creator can add eligible voters.");
+
+        voteInstance.voteStatus=false;
+    }
+
 }

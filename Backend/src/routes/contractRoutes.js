@@ -7,4 +7,5 @@ router.get('/get-creator-votes',contractController.getCreatorVotes)
 router.get('/get-user-votes',contractController.getUserVotes)
 router.post('/add-eligible-voters',contractController.addEligibleVoters)
 router.post('/vote',contractController.vote)
+router.post('/stop-vote',contractController.stopVote)
 module.exports = router;
