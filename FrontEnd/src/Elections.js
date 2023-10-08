@@ -50,75 +50,51 @@ export const Elections = () => {
     setPopupData(election);
   };
 
-  const handleCandidateClick = (electionId, candidateId) => {
-    setPopupData((prevPopupData) => {
-      if (prevPopupData.id === electionId) {
-        const updatedCandidates = prevPopupData.candidates.map((candidate) => {
-          return {
-            ...candidate,
-            disabled: candidate.id !== candidateId,
-          };
-        });
+  const handleVoteClick = (popupData, index) => {
+    console.log(popupData);
+    const address = localStorage.getItem("walletAddress");
+    const voteIndex = popupData.voteIndex;
+    const data = {
+      address: address,
+      candidateIndex: index,
+      voteIndex: voteIndex,
+    };
 
-        return {
-          ...prevPopupData,
-          candidates: updatedCandidates,
-        };
-      }
-      return prevPopupData;
-    });
-  };
+    const token = localStorage.getItem("token");
 
-  const handleVoteClick = (candidateId) => {
-    setPopupData((prevPopupData) => {
-      const updatedCandidates = prevPopupData.candidates.map((candidate) => {
-        if (candidate.id === candidateId) {
-          return {
-            ...candidate,
-            votes: candidate.votes + 1,
-            disabled: true,
-          };
+    const axiosConfig = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    axios
+      .post(url + "/contract/vote", data, axiosConfig)
+      .then((response) => {
+        // Handle the successful response here
+        console.log("POST request successful:", response.data.message);
+        window.alert(response.data.message);
+        window.location.reload();
+      })
+      .catch((error) => {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
+          // If the error response contains an 'error' field, show it in an alert
+          const errorMessage = error.response.data.error;
+          window.alert(errorMessage);
+        } else {
+          // If no specific error message is found, show a generic error message
+          window.alert("An error occurred. Please try again later.");
         }
-        return candidate;
+        console.error("Error sending POST request:", error);
       });
-
-      return {
-        ...prevPopupData,
-        candidates: updatedCandidates,
-        hasVoted: true, // Add this flag to indicate that the user has voted
-      };
-    });
   };
-
- 
 
   const closePopup = () => {
     setPopupData(null);
   };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // Hosted Elections
   const [getCreatorVotes, setgetCreatorVotes] = useState([]);
@@ -143,8 +119,8 @@ export const Elections = () => {
         .then((response) => {
           // Assuming response.data.getUserVotes is an array of election objects
           setgetCreatorVotes(response.data.getCreatorVotes);
-          console.log("creatpr votes:")
-          console.log(response.data.getCreatorVotes)
+          console.log("creatpr votes:");
+          console.log(response.data.getCreatorVotes);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -163,12 +139,39 @@ export const Elections = () => {
 
   const openPopup2 = (election) => {
     setPopupData2(election);
-    setIsElectionStopped(false); // Reset election status when opening the popup
+    setIsElectionStopped(!election.voteStatus); // Reset election status when opening the popup
   };
 
-  const toggleElectionStatus = () => {
-    // Implement logic to toggle the election status (start/stop) here
-    setIsElectionStopped((prevStatus) => !prevStatus);
+  const toggleElectionStatus = (voteIndex) => {
+    const address = localStorage.getItem("walletAddress");
+    // Prepare the request body
+    const requestBody = {
+      address: address,
+      voteIndex: voteIndex,
+    };
+
+    // Prepare the request headers
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: token,
+    };
+
+    // Send the API request
+    axios
+      .post(url + "/contract/stop-vote", requestBody, {
+        headers: headers,
+      })
+      .then((response) => {
+        // Handle the response here
+        console.log("API Response:", response.data);
+        // Implement logic to toggle the election status (start/stop) here
+
+        setIsElectionStopped((prevStatus) => !prevStatus);
+      })
+      .catch((error) => {
+        // Handle errors here
+        console.error("API Error:", error);
+      });
   };
 
   const closePopup2 = () => {
@@ -195,13 +198,41 @@ export const Elections = () => {
     }
   };
 
-  // Save wallet addresses to localStorage whenever the walletAddresses state changes
-  useEffect(() => {
-    const savedWalletAddresses = localStorage.getItem("walletAddresses");
-    if (savedWalletAddresses) {
-      setWalletAddresses(JSON.parse(savedWalletAddresses));
+  const handleWalletAddressConfirm = (voteIndex) => {
+    console.log(walletAddresses);
+    const address = localStorage.getItem("walletAddress");
+    const data = {
+      address: address,
+      newEligibleVoters: walletAddresses,
+      voteIndex: voteIndex,
+    };
+
+    const token = localStorage.getItem("token");
+
+    const axiosConfig = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    if (walletAddresses.length > 0) {
+      axios
+        .post(url + "/contract/add-eligible-voters", data, axiosConfig)
+        .then((response) => {
+          // Handle the successful response here
+          console.log("POST request successful:", response.data.message);
+          window.alert(response.data.message);
+          window.location.href = "/";
+        })
+        .catch((error) => {
+          // Handle any errors here
+          console.error("Error sending POST request:", error);
+        });
+
+      window.location.reload();
+    } else {
+      window.alert("No Wallet Addresses added");
     }
-  }, []);
+  };
 
   // Save wallet addresses to localStorage whenever the walletAddresses state changes
   useEffect(() => {
@@ -214,20 +245,26 @@ export const Elections = () => {
         <Navbar />
         <div className="list_container">
           <div className="active_elec">
-            <h1 className="header">Active Elections</h1>
+            <h1 className="header">Voter in Elections</h1>
             <ul>
-              {getUserVotes.map((election, index) => (
-                <li key={index}>
-                  {console.log("checking election")}
-                  {console.log(election)}
-                  <button
-                    className="active_btn"
-                    onClick={() => openPopup(election)}
-                  >
-                    {index}. {election.title} Election
-                  </button>
+              {getUserVotes.length > 0 ? (
+                getUserVotes.map((election, index) => (
+                  <li key={index}>
+                    {console.log("checking election")}
+                    {console.log(election)}
+                    <button
+                      className="active_btn"
+                      onClick={() => openPopup(election)}
+                    >
+                      {index}. {election.title} Election
+                    </button>
+                  </li>
+                ))
+              ) : (
+                <li>
+                  <h1 style={{ color: "white" }}>No votes connected to this address</h1>
                 </li>
-              ))}
+              )}
             </ul>
           </div>
         </div>
@@ -238,24 +275,19 @@ export const Elections = () => {
             <h2>{popupData.title}</h2>
             <div className="candidate_list">
               <ul>
-                {popupData.candidates.map((candidate) => (
-                  <li key={candidate.id}>
+                {popupData.candidates.map((candidate, index) => (
+                  <li>
                     <div
                       className={`candidate ${
                         candidate.disabled ? "disabled" : ""
                       }`}
-                      onClick={() =>
-                        handleCandidateClick(popupData.id, candidate.id)
-                      }
                     >
                       {candidate.name}
-                      <div className="vote-count">Votes: {candidate.votes}</div>
+
                       {!candidate.disabled && !popupData.hasVoted && (
                         <button
                           className="vote-button"
-                          onClick={() =>
-                            handleVoteClick(popupData.id, candidate.id)
-                          }
+                          onClick={() => handleVoteClick(popupData, index)}
                         >
                           Vote
                         </button>
@@ -281,20 +313,21 @@ export const Elections = () => {
             {console.log("second time")}
             {console.log(getCreatorVotes)}
             {getCreatorVotes.length > 0 ? (
-              getCreatorVotes.map((election,index) => (
+              getCreatorVotes.map((election, index) => (
                 <li key={index}>
                   <button
                     className="hosted_btn"
                     onClick={() => openPopup2(election)}
                   >
-                   {index}. {election.title} Election
-                   
+                    {index}. {election.title} Election
                   </button>
                 </li>
               ))
             ) : (
               <li>
-                <h1 style={{ color: "white" }}>No Votes Connected to this wallet</h1>
+                <h1 style={{ color: "white" }}>
+                  No Votes Connected to this wallet
+                </h1>
               </li>
             )}
           </ul>
@@ -305,6 +338,9 @@ export const Elections = () => {
           <div className="pop_up-content2">
             <div className="pop_up_head">
               <h2>{popupData2.title}</h2>
+              {console.log("pop up 2 data")}
+              {console.log(popupData2)}
+
               <button className="close-btn2" onClick={closePopup2}>
                 Close
               </button>
@@ -313,9 +349,9 @@ export const Elections = () => {
               <ul className="cand_box2">
                 {popupData2.candidates.map((candidate, index) => (
                   <li className="cand_item2" key={index}>
-                    <span>{candidate}</span>
+                    <span>{candidate.name}</span>
                     <div className="vote-count">
-                      Votes: {popupData2.votes[index]}
+                      Votes: {candidate.voteCount}
                     </div>
                   </li>
                 ))}
@@ -324,9 +360,10 @@ export const Elections = () => {
             <div className="start_stop">
               <button
                 className="election-status-btn"
-                onClick={toggleElectionStatus}
+                onClick={() => toggleElectionStatus(popupData2.voteIndex)}
+                disabled={isElectionStopped}
               >
-                {isElectionStopped ? "Start" : "Stop"}
+                {isElectionStopped ? "Election Over" : "Stop"}
               </button>
             </div>
             {/* Display Wallet Addresses */}
@@ -362,8 +399,28 @@ export const Elections = () => {
                     </li>
                   ))}
                 </ul>
+                <div className="wallet_field">
+                  <button
+                    className="wallet_btn"
+                    onClick={() =>
+                      handleWalletAddressConfirm(popupData2.voteIndex)
+                    }
+                  >
+                    Confirm
+                  </button>
+                </div>
               </div>
             </div>
+          </div>
+          <div className="eligibleVotersView">
+            <h1>Eligible Voters</h1>
+            <ul>
+              {popupData2.eligibleVoters.map((voters, index) => (
+                <li style={{ fontSize: "15px" }}>
+                  {index}. {voters}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       )}

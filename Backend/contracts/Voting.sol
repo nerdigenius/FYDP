@@ -107,8 +107,7 @@ contract Voting {
         // Check if the caller has not already voted in the specified vote.
         require(!voteInstance.voters[msg.sender], "You have already voted.");
         require(_candidateIndex < voteInstance.candidates.length, "Invalid candidate index.");
-        // Check if the current timestamp is within the voting period.
-        require(voteInstance.voteStatus=true, "Voting is not currently active.");
+        require(voteInstance.voteStatus==true, "Voting is not currently active.");
 
         // Increase the vote count for the selected candidate and mark the caller as a voter.
         voteInstance.candidates[_candidateIndex].voteCount++;

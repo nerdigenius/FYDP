@@ -6,6 +6,7 @@
 .Elections {
   background-color: #001124;
   font-family: 'OCR A Std', sans-serif;
+  min-height: 100vh;
 }
 
 /* Style the Active Elections and Hosted Elections sections */
@@ -15,7 +16,17 @@
   margin-left: 32%;
   margin-bottom: 100px;
 }
-
+.eligibleVotersView{
+  position: fixed;
+  left: 68%;
+  border-radius: 15px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  width: 30%;
+  text-align: center;
+  padding: 10px;
+  overflow: scroll;
+}
 /* Style the section titles */
 .header {
   text-align: center;
@@ -268,12 +279,13 @@
   border-radius: 15px;
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  width: 52%;
+  width: 51%;
   text-align: center;
   display: flex;
   flex-direction: column;
   padding: 10px;
   overflow: scroll;
+  margin-right: 20%;
 }
 
 .pop_up_head {

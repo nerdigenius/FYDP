@@ -55,7 +55,7 @@ async function createVoteInstance(req, res) {
       // Respond with the transaction hash or other relevant information
       return res
         .status(200)
-        .json({ transactionHash: startVoteTransaction.hash });
+        .json({ transactionHash: startVoteTransaction.hash,message:"VoteCreated" });
     } catch (error) {
       console.log(error)
       if (error.error && error.error.data && error.error.data.reason) {

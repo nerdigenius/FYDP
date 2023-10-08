@@ -81,7 +81,7 @@ export const UrElections = () => {
           // Handle the successful response here
           console.log("POST request successful:", response.data.message);
           window.alert(response.data.message);
-          window.location.href = "/";
+          window.location.href = "/elections";
         })
         .catch((error) => {
           // Handle any errors here
