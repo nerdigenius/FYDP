@@ -57,6 +57,7 @@ async function createVoteInstance(req, res) {
         .status(200)
         .json({ transactionHash: startVoteTransaction.hash });
     } catch (error) {
+      console.log(error)
       if (error.error && error.error.data && error.error.data.reason) {
         return res.status(500).json({
           message: "Internal Server Error",
@@ -76,6 +77,7 @@ async function createVoteInstance(req, res) {
 
 async function getUserVotes(req, res) {
   const token = req.header("Authorization");
+
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -99,7 +101,7 @@ async function getUserVotes(req, res) {
       const gasLimit = 6721975; // You can adjust this value as needed
 
       // Create a signer using the user's address (public key)
-      const { address } = req.body;
+      const { address } = req.query;
       const sender = provider.getSigner(address); // Use the user's address
 
       // Send the transaction to get the user's votes
@@ -161,7 +163,8 @@ async function getCreatorVotes(req, res) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      const { address } = req.body;
+      const { address } = req.query;
+      console.log(address)
 
       // Specify the gas limit when sending the transaction
       const gasLimit = 6721975; // You can adjust this value as needed
@@ -193,6 +196,7 @@ async function getCreatorVotes(req, res) {
       // Respond with the result directly
       return res.status(200).json({ getCreatorVotes: formattedVotes });
     } catch (error) {
+      console.log(error)
       if (error.error && error.error.data && error.error.data.reason) {
         return res.status(500).json({
           message: "Internal Server Error",
