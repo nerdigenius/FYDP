@@ -224,6 +224,14 @@
   transform: translateY(-1px);
 }
 
+.election_title_box{
+  text-align: center;
+  font-size: 28px;
+  border-bottom: 3px solid whitesmoke;
+  width: 60%;
+  padding: 15px;
+}
+
 /* bottom bar */
 /* .bottom_bar {
   margin-left: 25%;

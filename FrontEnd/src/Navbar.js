@@ -29,6 +29,7 @@ export const Navbar = () => {
           localStorage.setItem('walletAddress', walletAddress);
     
           setIsConnected(true);
+          window.location.reload();
         }
       } catch (error) {
         console.error('Connection failed:', error);
@@ -43,6 +44,7 @@ export const Navbar = () => {
         localStorage.removeItem('walletAddress');
     
         setIsConnected(false);
+        window.location.reload();
       } catch (error) {
         console.error('Disconnection failed:', error);
         window.alert('Disconnection failed: ' + error.message);
@@ -57,8 +59,7 @@ export const Navbar = () => {
       // Make a POST request to the logout endpoint
       await axios.post('http://localhost:8000/auth/logout');
 
-      localStorage.removeItem('token');
-      localStorage.removeItem('walletAddress');
+      localStorage.clear()
       navigate('/'); // Assuming you have defined a history object for navigation
     } catch (error) {
       console.error('Logout failed:', error);

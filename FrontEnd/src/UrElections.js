@@ -1,61 +1,106 @@
-import React from 'react'
-import './UrElections.css'
-import { useState, useEffect } from 'react'
-import { Navbar } from './Navbar'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import "./UrElections.css";
+import { useState, useEffect } from "react";
+import { Navbar } from "./Navbar";
+import { useNavigate } from "react-router-dom";
+import { url } from "./utils/url";
+import axios from "axios";
 
 export const UrElections = () => {
   // Add and Remove Candidates
   const [candidates, setCandidates] = useState(() => {
-    const savedCandidates = localStorage.getItem('candidates')
-    return savedCandidates ? JSON.parse(savedCandidates) : []
-  })
+    const savedCandidates = localStorage.getItem("candidates");
+    return savedCandidates ? JSON.parse(savedCandidates) : [];
+  });
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false)
-  const [newCandidate, setNewCandidate] = useState('')
-  const [walletAddresses, setWalletAddresses] = useState([])
-  const [newWalletAddress, setNewWalletAddress] = useState('')
-  const [isEditable, setIsEditable] = useState(true)
-  const navigate = useNavigate()
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [newCandidate, setNewCandidate] = useState("");
+  const [walletAddresses, setWalletAddresses] = useState([]);
+  const [newWalletAddress, setNewWalletAddress] = useState("");
+  const [isEditable, setIsEditable] = useState(true);
+  const [Title, setTitle] = useState('');
+  const navigate = useNavigate();
 
   // Save candidates to localStorage whenever the candidates state changes
   useEffect(() => {
-    localStorage.setItem('candidates', JSON.stringify(candidates))
-  }, [candidates])
+    localStorage.setItem("candidates", JSON.stringify(candidates));
+  }, [candidates]);
+  
 
+  const handleInputChange = (e) => {
+    const newValue = e.target.value;
+    setTitle(newValue);
+  };
   const handleAddCandidate = () => {
-    if (newCandidate.trim() !== '') {
-      setCandidates([...candidates, newCandidate])
-      setNewCandidate('')
+    if (newCandidate.trim() !== "") {
+      setCandidates([...candidates, newCandidate]);
+      setNewCandidate("");
     }
-  }
+  };
 
   const handleRemoveCandidate = (index) => {
     const confirmRemove = window.confirm(
-      'Are you sure you want to remove this candidate?'
-    )
+      "Are you sure you want to remove this candidate?"
+    );
     if (confirmRemove) {
-      const updatedCandidates = [...candidates]
-      updatedCandidates.splice(index, 1)
-      setCandidates(updatedCandidates)
+      const updatedCandidates = [...candidates];
+      updatedCandidates.splice(index, 1);
+      setCandidates(updatedCandidates);
     }
-  }
+  };
 
   const handleStartStop = () => {
-    setIsEditable(!isEditable)
-    if (isEditable) {
+    let candidate = localStorage.getItem("candidates");
+    let address = localStorage.getItem("walletAddress");
+    console.log(address);
+  
+    if (
+      isEditable &&
+      Title !== "" &&
+      candidate.length > 0 && // Check if candidate is not an empty array
+      address !== "" &&
+      address !== null
+    ) {
+      const data = {
+        address: address,
+        candidateNames: JSON.parse(candidate), // Parse candidate as JSON
+        title: Title,
+      };
+  
+      const token = localStorage.getItem("token");
+  
+      const axiosConfig = {
+        headers: {
+          Authorization: token,
+        },
+      };
+  
+      axios
+        .post(url + "/contract/create-votes", data, axiosConfig)
+        .then((response) => {
+          // Handle the successful response here
+          console.log("POST request successful:", response.data.message);
+          window.alert(response.data.message);
+          window.location.href = "/";
+        })
+        .catch((error) => {
+          // Handle any errors here
+          console.error("Error sending POST request:", error);
+        });
+  
       // Redirect to the Elections page when starting
-      navigate('/elections')
+      navigate("/elections");
+    } else {
+      window.alert("Wallet not connected, Title is not set, or candidates not added");
     }
-  }
-
+  };
   //Add wallet addresses List
   const handleAddWalletAddress = () => {
-    if (newWalletAddress.trim() !== '') {
-      setWalletAddresses([...walletAddresses, newWalletAddress])
-      setNewWalletAddress('')
+    if (newWalletAddress.trim() !== "") {
+      setWalletAddresses([...walletAddresses, newWalletAddress]);
+      setNewWalletAddress("");
     }
-  }
+  };
 
   // const handleRemoveAddress = (index) => {
   //   // Show a confirmation alert
@@ -98,7 +143,7 @@ export const UrElections = () => {
           </li>
         ))}
       </ul>
-    )
+    );
   }
 
   return (
@@ -108,6 +153,16 @@ export const UrElections = () => {
       </section>
       <section>
         <div className="top_bar">
+          <h1>Set Election Title</h1>
+          <div className="election_title_box">
+            <input
+              type="text"
+              style={{ padding: "5px" }}
+              value={Title}
+              onChange={handleInputChange}
+            ></input>
+          </div>
+
           <h1>Candidates</h1>
           <div className="cand_list">
             <div className="cand_table">
@@ -124,7 +179,7 @@ export const UrElections = () => {
                   Add +
                 </button>
                 <button className="start_btn" onClick={handleStartStop}>
-                  {isEditable ? 'Start' : 'Stop'}
+                  {isEditable ? "Start" : "Stop"}
                 </button>
               </div>
               {/* Place the pop-up code here */}
@@ -158,7 +213,7 @@ export const UrElections = () => {
         </div>
       </section>
       {/* <section> */}
-        {/* <div className="bottom_bar">
+      {/* <div className="bottom_bar">
           <h1>Add Wallet Address</h1>
           <div className="wallet_field">
             <input
@@ -177,8 +232,8 @@ export const UrElections = () => {
             </button>
           </div> */}
 
-          {/* Display Wallet Addresses */}
-          {/* <div className="wallet_list">
+      {/* Display Wallet Addresses */}
+      {/* <div className="wallet_list">
             <ul>
               {walletAddresses.map((address, index) => (
                 <li key={index}>
@@ -196,5 +251,5 @@ export const UrElections = () => {
         </div> */}
       {/* </section> */}
     </div>
-  )
-}
+  );
+};
