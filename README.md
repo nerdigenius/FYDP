@@ -1,5 +1,6 @@
 # Devote Voting DApp Setup Guide
 
+## The following instructions are for running the application locally only
 ## Prerequisite Installs
 Before proceeding with the setup, ensure that you have the following software installed:
 
