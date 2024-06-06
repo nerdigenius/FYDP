@@ -1,7 +1,6 @@
 # Devote Voting DApp Setup Guide
 
-## Prerequisite Installshttps://github.com/nerdigenius/FYDP/blob/main/README.md
-
+## Prerequisite Installs
 Before proceeding with the setup, ensure that you have the following software installed:
 
 - MongoDB
