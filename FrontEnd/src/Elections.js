@@ -177,14 +177,20 @@ export const Elections = () => {
   const closePopup2 = () => {
     setPopupData2(null);
   };
-
+  function isValidEthereumAddress(address) {
+    const re = /^0x[a-fA-F0-9]{40}$/;
+    return re.test(address);
+  }
   //Add wallet addresses List
   const handleAddWalletAddress = () => {
-    if (newWalletAddress.trim() !== "") {
+    if (newWalletAddress.trim() !== "" && isValidEthereumAddress(newWalletAddress)) {
       setWalletAddresses([...walletAddresses, newWalletAddress]);
       setNewWalletAddress("");
+    } else {
+      console.error('Invalid Ethereum address:', newWalletAddress);
+      window.alert("Invalid Wallet Address")
     }
-  };
+  }
 
   const handleRemoveAddress = (index) => {
     // Show a confirmation alert
