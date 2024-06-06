@@ -46,5 +46,17 @@ Before proceeding with the setup, ensure that you have the following software in
    ```sh
    npm start
 
+## Frontend Setup
 
+1. Open a terminal in the frontend folder.
+2. Install the required dependencies by running:
+   ```sh
+   npm i
+3. Start the frontend application with the command:
+   ```sh
+   npm start
+
+## Conclusion
+
+Your Voting DApp should now be set up and running. Ensure that both the backend server and frontend application are active, and you should be able to interact with your DApp through the browser.
 
