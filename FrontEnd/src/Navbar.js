@@ -9,10 +9,26 @@ export const Navbar = () => {
 
   // Check if wallet address is present in localStorage on component mount
   useEffect(() => {
-    const storedWalletAddress = localStorage.getItem('walletAddress');
-    if (storedWalletAddress) {
-      setIsConnected(true);
+    const checkWalletConnection = async () => {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const selectedAddress = window.ethereum.selectedAddress;
+        console.log("check selected address: " + selectedAddress)
+        if (selectedAddress != null) {
+          setIsConnected(true);
+          localStorage.setItem('walletAddress', selectedAddress);
+        }
+        else {
+          setIsConnected(false);
+          localStorage.setItem('walletAddress', null);
+        }
+      } catch (error) {
+        console.error('Failed to check for connected accounts:', error);
+      }
     }
+
+    checkWalletConnection();
+
   }, []);
 
   const handleToggleConnection = async () => {
@@ -20,14 +36,14 @@ export const Navbar = () => {
       try {
         // Request MetaMask's permission to connect
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    
+
         // Check if the user approved the connection
         if (accounts.length > 0) {
           const walletAddress = accounts[0];
-    
+
           // Store wallet address in localStorage
           localStorage.setItem('walletAddress', walletAddress);
-    
+
           setIsConnected(true);
           window.location.reload();
         }
@@ -35,24 +51,10 @@ export const Navbar = () => {
         console.error('Connection failed:', error);
         window.alert('Connection failed: ' + error.message);
       }
-    } else {
-      try {
-        // Clear the current account selection
-        window.ethereum.selectedAddress = null;
-    
-        // Remove wallet address from localStorage
-        localStorage.removeItem('walletAddress');
-    
-        setIsConnected(false);
-        window.location.reload();
-      } catch (error) {
-        console.error('Disconnection failed:', error);
-        window.alert('Disconnection failed: ' + error.message);
-      }
     }
   };
-  
-  
+
+
 
   const handleLogout = async () => {
     try {
@@ -76,12 +78,13 @@ export const Navbar = () => {
               <span>DeVote</span>
             </p>
             <ul>
+              <li><span style={{ color: "white", fontSize: "15px" }}>Wallet address: {isConnected ? localStorage.getItem("walletAddress") : ""}</span></li>
               <li>
                 <button
                   className={`connect-button ${isConnected ? 'disconnect' : 'connect'}`}
                   onClick={handleToggleConnection}
                 >
-                  {isConnected ? 'Disconnect' : 'Connect'}
+                  {isConnected ? 'Connected' : 'Connect'}
                 </button>
               </li>
               <li>

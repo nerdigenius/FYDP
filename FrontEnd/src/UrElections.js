@@ -25,7 +25,7 @@ export const UrElections = () => {
   useEffect(() => {
     localStorage.setItem("candidates", JSON.stringify(candidates));
   }, [candidates]);
-  
+
 
   const handleInputChange = (e) => {
     const newValue = e.target.value;
@@ -52,29 +52,32 @@ export const UrElections = () => {
   const handleStartStop = () => {
     let candidate = localStorage.getItem("candidates");
     let address = localStorage.getItem("walletAddress");
-    console.log(address);
-  
+    console.log("startstop address:" + address);
+
     if (
       isEditable &&
       Title !== "" &&
       candidate.length > 0 && // Check if candidate is not an empty array
       address !== "" &&
       address !== null
+      &&
+      address !== "null"
     ) {
+      console.log("just started")
       const data = {
         address: address,
         candidateNames: JSON.parse(candidate), // Parse candidate as JSON
         title: Title,
       };
-  
+
       const token = localStorage.getItem("token");
-  
+
       const axiosConfig = {
         headers: {
           Authorization: token,
         },
       };
-  
+
       axios
         .post(url + "/contract/create-votes", data, axiosConfig)
         .then((response) => {
@@ -87,7 +90,7 @@ export const UrElections = () => {
           // Handle any errors here
           console.error("Error sending POST request:", error);
         });
-  
+
       // Redirect to the Elections page when starting
       navigate("/elections");
     } else {

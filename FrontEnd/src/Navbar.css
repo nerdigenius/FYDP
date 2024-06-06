@@ -295,6 +295,7 @@
 .disconnect {
   background: #57c84db4;
   color: white;
+  pointer-events: none;
 }
 
 .connect-button:hover {
