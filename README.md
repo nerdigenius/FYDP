@@ -37,6 +37,7 @@ Before proceeding with the setup, ensure that you have the following software in
    - Copy the private key from any wallet address in Ganache and set it as PRIVATE_KEY.
    - Replace MONGODB_URI with your MongoDB connection string.
    - The smart contract is located in the contract folder within the backend folder.
+   - Replace JWT_SECRET with any word of your choice.
 5. To deploy the contract, open a terminal in the backend folder and run:
    ```sh
    npx hardhat run scripts/deploy.js
