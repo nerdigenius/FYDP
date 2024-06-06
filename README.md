@@ -25,3 +25,4 @@ Before proceeding with the setup, ensure that you have the following software in
 
    ```sh
    npm install
+3. Create a .env file in the backend folder with the following fields:
