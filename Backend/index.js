@@ -8,11 +8,12 @@ const contractRoutes = require('./src/routes/contractRoutes')
 
 const app = express();
 const cors = require("cors");
-const db='devote'
+const db='/devote'
 
 app.use(cors());
 app.use(bodyParser.json());
-mongoose.connect(config.MONGODB_URI+db, {
+console.log(config.MONGODB_URI+db);
+mongoose.connect(config.MONGODB_URI + db, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
